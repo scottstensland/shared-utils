@@ -7,7 +7,6 @@ module.exports.shared_utils = function(spec, my) { // functional inheritance Cro
 
 	my = my || {};
 
-
 	/**
 	 * Returns a random number between min and max inclusive   
 	 */
