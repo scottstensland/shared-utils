@@ -1,0 +1,18 @@
+{
+  "name": "shared_utils",
+  "version": "0.0.0",
+  "description": "contains useful utilities like random number generator for ints or floats in min - max range inclusive",
+  "main": "src/shared_utils.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "make test"
+  },
+  "keywords": [
+    "utility",
+    "random"
+  ],
+  "author": "Scott Stensland <scottstensland@gmail.com> (http://catfoodnation.com/)",
+  "license": "ISC"
+}
