@@ -1,12 +1,11 @@
 {
   "name": "shared-utils",
   "version": "0.0.2",
-  "description": "contains useful utilities like random number generator for ints or floats in min - max range inclusive",
-  "main": "src/shared_utils.js",
+  "description": "contains useful utilities like various float to int conversions, 32 bit float to 16 bit int conversion, random number generator for ints or floats in min - max range inclusive",
+  "main": "src/node_utils.js",
   "directories": {
     "test": "test"
   },
-
   "repository": {
     "type": "git",
     "url": "https://github.com/scottstensland/shared-utils.git"
@@ -19,5 +18,9 @@
     "random"
   ],
   "author": "Scott Stensland <scottstensland@gmail.com> (http://catfoodnation.com/)",
-  "license": "ISC"
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/scottstensland/shared-utils/issues"
+  },
+  "homepage": "https://github.com/scottstensland/shared-utils"
 }
