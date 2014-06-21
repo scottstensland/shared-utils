@@ -1,5 +1,5 @@
 
-// var shared_utils = require('./shared_utils');
+var shared_utils = require('./shared_utils');
 var jdataview = require('jdataview');
 var fs = require('fs');
 
