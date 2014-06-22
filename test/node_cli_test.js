@@ -4,9 +4,9 @@
 
 
 
-// var shared_utils_obj = require("shared-utils");
+var shared_utils_obj = require("shared-utils");
 // var shared_utils_obj = require("../src/shared_utils");
-var shared_utils_obj = require("../src/node_utils");
+// var shared_utils_obj = require("../src/node_utils");
 
 
 console.log("shared_utils_obj ", shared_utils_obj);
@@ -31,5 +31,22 @@ for (var index = 0; index < max_index; index++) {
 
 	console.log(index, " random float ", curr_value);
 }
+
+
+var source_obj = {
+
+	aaa :  "aaaa",
+	bbb :  "babab"
+};
+
+var target_obj = {};
+
+
+
+shared_utils_obj.copy_properties_across_objects(source_obj, target_obj);
+
+console.log("here is source_obj ", source_obj);
+
+console.log("here is target_obj ", target_obj);
 
 
