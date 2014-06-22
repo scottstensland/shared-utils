@@ -1,11 +1,5 @@
 
-
-module.exports.shared_utils = function(spec, my) { // functional inheritance Crockford 2008 pg 52
-		
-	var that = {},
-		spec = spec || {};
-
-	my = my || {};
+(function(exports) {
 
 	/**
 	 * Returns a random number between min and max inclusive   
@@ -13,7 +7,7 @@ module.exports.shared_utils = function(spec, my) { // functional inheritance Cro
 	var get_random_in_range_inclusive_float = function (min, max) {
 	    return Math.random() * (max - min) + min;
 	};
-	that.get_random_in_range_inclusive_float = get_random_in_range_inclusive_float;
+	exports.get_random_in_range_inclusive_float = get_random_in_range_inclusive_float;
 
 	/**
 	 * Returns a random integer between min and max inclusive 
@@ -22,14 +16,10 @@ module.exports.shared_utils = function(spec, my) { // functional inheritance Cro
 	var get_random_in_range_inclusive_int = function (min, max) {
 	    return Math.floor(Math.random() * (max - min + 1)) + min;
 	};
-	that.get_random_in_range_inclusive_int = get_random_in_range_inclusive_int;
+	exports.get_random_in_range_inclusive_int = get_random_in_range_inclusive_int;
 
 	// ---
 
-	return that;
-};
-
-
-
+})(typeof exports === "undefined" ? this["shared-utils"]={}: exports);
 
 

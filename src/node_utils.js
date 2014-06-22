@@ -9,6 +9,11 @@ var fs = require('fs');
     
 // ---
 
+exports.get_random_in_range_inclusive_float = shared_utils.get_random_in_range_inclusive_float;
+exports.get_random_in_range_inclusive_int   = shared_utils.get_random_in_range_inclusive_int;
+
+// ---
+
 var convert_16_bit_signed_ints_into_32_bit_floats = function(audio_buffer, size_buffer) {
 
 /*
