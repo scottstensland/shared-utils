@@ -11,6 +11,7 @@ var fs = require('fs');
 
 exports.get_random_in_range_inclusive_float = shared_utils.get_random_in_range_inclusive_float;
 exports.get_random_in_range_inclusive_int   = shared_utils.get_random_in_range_inclusive_int;
+exports.set_random_seed                     = shared_utils.set_random_seed;
 
 // ---
 
@@ -804,7 +805,9 @@ var normalize_buffer = function(audio_obj, spec) {
 
     var  allowed_difference_btw_max_N_min = allowed_maximum - allowed_minimum;
     var observed_difference_btw_max_N_min = observed_max - observed_min;
-    var observed_midpoint = observed_difference_btw_max_N_min / 2.0;
+
+    // var observed_midpoint = observed_difference_btw_max_N_min / 2.0;
+    var observed_midpoint = (observed_max + observed_min) / 2.0;
 
 
     console.log("allowed_difference_btw_max_N_min ", allowed_difference_btw_max_N_min);
@@ -833,15 +836,33 @@ var normalize_buffer = function(audio_obj, spec) {
         console.log("observed_midpoint ", observed_midpoint);
         console.log("correction_factor ", correction_factor);
 
+        var post_processing_min =  9999.0;
+        var post_processing_max = -9999.0;
 
         for (var index = 0; index < size_buffer; index++) {
 
-            var prior_value = audio_obj[property_buffer][index];
+            var prior_value = parseFloat(audio_obj[property_buffer][index]);
 
-            audio_obj[property_buffer][index] = correction_factor * audio_obj[property_buffer][index] - observed_midpoint;
+            // audio_obj[property_buffer][index] = (correction_factor * audio_obj[property_buffer][index]) - observed_midpoint;
+            // audio_obj[property_buffer][index] = correction_factor * audio_obj[property_buffer][index];
+            // audio_obj[property_buffer][index] = correction_factor * (1.0 * audio_obj[property_buffer][index] - observed_midpoint);
+            audio_obj[property_buffer][index] = correction_factor * (audio_obj[property_buffer][index] - observed_midpoint);
 
-            console.log(index, " input value ", prior_value, " output value ", audio_obj[property_buffer][index]);
-        };        
+            console.log(index, " CCCCCCC input value ", prior_value, " output value ", audio_obj[property_buffer][index]);
+
+
+            if (post_processing_min > audio_obj[property_buffer][index]) {
+
+                post_processing_min = audio_obj[property_buffer][index];
+
+            } else if (post_processing_max < audio_obj[property_buffer][index]) {
+
+                post_processing_max = audio_obj[property_buffer][index];
+            }
+        };   
+
+        console.log(" CCCCCCC post_processing_min ", post_processing_min, " post_processing_max ", post_processing_max);
+     
     };
 };
 exports.normalize_buffer = normalize_buffer;
