@@ -1,5 +1,6 @@
 
 var shared_utils = require('./shared_utils');
+var audio_utils = require('./audio_utils');
 var jdataview = require('jdataview');
 var fs = require('fs');
 
@@ -12,6 +13,10 @@ var fs = require('fs');
 exports.get_random_in_range_inclusive_float = shared_utils.get_random_in_range_inclusive_float;
 exports.get_random_in_range_inclusive_int   = shared_utils.get_random_in_range_inclusive_int;
 exports.set_random_seed                     = shared_utils.set_random_seed;
+
+
+exports.pop_audio_buffer                    = audio_utils.pop_audio_buffer;
+
 
 // ---
 
