@@ -316,6 +316,13 @@ var write_wav = function(wav_file_obj) {
     var pcm_format = 16;   // valid values of Chunk size :   16 or 18 or 40
     var audio_format = 1; // raw PCM
 
+    var path = "unknown_filename_must_populate_filename";
+    // var data_length = wav_file_obj.buffer.length;
+    var data_length = "unknown_filename_must_populate_buffer";
+
+
+
+
     // show_object_with_buffer(wav_file_obj, "in write_wav");
 
 
@@ -348,7 +355,21 @@ var write_wav = function(wav_file_obj) {
                 break;
             }
 
+            case "filename" : {
+
+                path = wav_file_obj[property];
+                break;
+            }
+
+            case "buffer" : {
+
+                data_length = wav_file_obj[property];
+                break;
+            }
+
             // --- default - catch all if not identifed above
+
+            default :
 
             console.log("NOTICE - write_wav ignore this ... seeing property NOT on authorized list : ", 
                             property, " value ", wav_file_obj[property]);
@@ -372,7 +393,7 @@ var write_wav = function(wav_file_obj) {
 
     // ---
 
-    var path = wav_file_obj.filename;
+    // var path = wav_file_obj.filename;
 
     // console.log("/////////// about to write wav output file path ", path);
     // console.log("size buffer to write  ", wav_file_obj.buffer.length);  // deal with 1 channel for now
@@ -381,7 +402,7 @@ var write_wav = function(wav_file_obj) {
 
     // ---
 
-    var data_length = wav_file_obj.buffer.length;
+    // var data_length = wav_file_obj.buffer.length;
 
     var entire_size_file = data_length + size_header;
 
