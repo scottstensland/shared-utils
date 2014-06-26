@@ -13,6 +13,8 @@ var fs = require('fs');
 exports.get_random_in_range_inclusive_float = shared_utils.get_random_in_range_inclusive_float;
 exports.get_random_in_range_inclusive_int   = shared_utils.get_random_in_range_inclusive_int;
 exports.set_random_seed                     = shared_utils.set_random_seed;
+exports.diff_buffers                        = shared_utils.diff_buffers;
+
 
 
 exports.pop_audio_buffer                    = audio_utils.pop_audio_buffer;
@@ -374,7 +376,7 @@ var write_wav = function(wav_file_obj) {
             console.log("NOTICE - write_wav ignore this ... seeing property NOT on authorized list : ", 
                             property, " value ", wav_file_obj[property]);
             break;
-        }
+        };
     }
 
     // console.log("FFFFFFFF sample_rate  ", sample_rate);
