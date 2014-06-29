@@ -41,13 +41,11 @@
 	};
 	exports.get_random_in_range_inclusive_int = get_random_in_range_inclusive_int;
 
-
 	// ----------------------
 
 	var diff_entire_buffers = function(left_obj, right_obj, size_buffer, given_spec) {
 
 		console.log("TOP of diff_entire_buffers");
-
 
 		var total_diffs = 0;
 
