@@ -902,6 +902,9 @@ exports.normalize_buffer = normalize_buffer;
 
 exports.write_buffer_to_file = function(audio_obj, wav_output_filename, spec) {
 
+    console.log("TTT ___ write_buffer_to_file ___ ");
+
+
     var spec = spec || { flag_normalize : true };
 
     console.log("flag_normalize ", spec.flag_normalize);
@@ -946,6 +949,8 @@ exports.write_buffer_to_file = function(audio_obj, wav_output_filename, spec) {
     // show_buffer(wav_file_obj.buffer, wav_file_obj.buffer.length, 100);
 
     write_wav(output_16_bit_audio_obj);
+
+    console.log("BBB ___ write_buffer_to_file ___ ");
 };
 
 // ---
