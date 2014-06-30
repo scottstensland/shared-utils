@@ -375,6 +375,8 @@ var write_wav = function(wav_file_obj) {
 
             console.log("NOTICE - write_wav ignore this ... seeing property NOT on authorized list : ", 
                             property, " value ", wav_file_obj[property]);
+            process.exit(8);
+
             break;
         };
     }
@@ -658,17 +660,17 @@ var convert_32_bit_floats_into_16_bit_ints = function(input_32_bit_float_audio_o
 
     var size_32_bit_float_buff = input_32_bit_float_audio_obj.buffer.length;
 
-    console.log("size 32 bit float ", size_32_bit_float_buff);
+    // console.log("size 32 bit float ", size_32_bit_float_buff);
 
     var num_16_bit_chunks_per_32_bit_float = Float32Array.BYTES_PER_ELEMENT / 
                                     Uint16Array.BYTES_PER_ELEMENT;
 
-    console.log("num_16_bit_chunks_per_32_bit_float ", num_16_bit_chunks_per_32_bit_float);
+    // console.log("num_16_bit_chunks_per_32_bit_float ", num_16_bit_chunks_per_32_bit_float);
 
 
     var size_16_bit_int_buff = size_32_bit_float_buff * num_16_bit_chunks_per_32_bit_float;
 
-    console.log("size 16 bit ints ", size_16_bit_int_buff); //  is OK
+    // console.log("size 16 bit ints ", size_16_bit_int_buff); //  is OK
 
     output_16_bit_audio_obj.buffer = new Buffer(size_16_bit_int_buff);// input buffer is 32 bit we want 16 bit so half it
 
@@ -729,7 +731,7 @@ TypeError: value is out of bounds
 		// same_value_in_16_bit_signed_int = ~~(one_float[0] * (local_divisor));
 		// same_value_in_16_bit_signed_int = ~~(one_float[0] * ((one_float[0] < 0) ? 0x8000 : 0x7FFF));// WORKS
 
-        console.log(index_float, " aboutttttt to show raw float ", input_32_bit_float_audio_obj.buffer[index_float]);
+        // console.log(index_float, " aboutttttt to show raw float ", input_32_bit_float_audio_obj.buffer[index_float]);
 
 		same_value_in_16_bit_signed_int = ~~(input_32_bit_float_audio_obj.buffer[index_float] * ((input_32_bit_float_audio_obj.buffer[index_float] < 0) ? 0x8000 : 0x7FFF));
 
@@ -765,31 +767,31 @@ var normalize_buffer = function(audio_obj, spec) {
 
         property_buffer = spec.property_buffer;
 
-        console.log("seeing input spec with spec.property_buffer ", spec.property_buffer);
+        // console.log("seeing input spec with spec.property_buffer ", spec.property_buffer);
     };
     if (typeof spec.allowed_minimum !== "undefined") {
 
         allowed_minimum = spec.allowed_minimum;
 
-        console.log("seeing input spec with spec.allowed_minimum ", spec.allowed_minimum);
+        // console.log("seeing input spec with spec.allowed_minimum ", spec.allowed_minimum);
     };
     if (typeof spec.allowed_maximum !== "undefined") {
 
         allowed_maximum = spec.allowed_maximum;
 
-        console.log("seeing input spec with spec.allowed_maximum ", spec.allowed_maximum);
+        // console.log("seeing input spec with spec.allowed_maximum ", spec.allowed_maximum);
     };
 
-    console.log("here is spec ", spec);
-    console.log("here is spec property_buffer ", property_buffer);
-    console.log("here is spec allowed_minimum ", allowed_minimum);
-    console.log("here is spec allowed_maximum ", allowed_maximum);
+    // console.log("here is spec ", spec);
+    // console.log("here is spec property_buffer ", property_buffer);
+    // console.log("here is spec allowed_minimum ", allowed_minimum);
+    // console.log("here is spec allowed_maximum ", allowed_maximum);
 
     // var given_buffer = audio_obj[property_buffer];
 
     var size_buffer = audio_obj[property_buffer].length;
 
-    console.log("size_buffer ", size_buffer);
+    // console.log("size_buffer ", size_buffer);
 
     var observed_min = 9999.0; // pull from some max float constant if possible
     var observed_max = -999.9; // pull from some max float constant if possible
@@ -800,7 +802,7 @@ var normalize_buffer = function(audio_obj, spec) {
 
         var curr_value = audio_obj[property_buffer][index];
 
-        console.log(index, " curr_value ", curr_value);
+        // console.log(index, " curr_value ", curr_value);
 
 
         if (observed_min > curr_value) {
@@ -815,11 +817,11 @@ var normalize_buffer = function(audio_obj, spec) {
 
     // ---
 
-    console.log("observed_min ", observed_min);
-    console.log("observed_max ", observed_max);
+    // console.log("observed_min ", observed_min);
+    // console.log("observed_max ", observed_max);
 
-    console.log("allowed_minimum ", allowed_minimum);
-    console.log("allowed_maximum ", allowed_maximum);
+    // console.log("allowed_minimum ", allowed_minimum);
+    // console.log("allowed_maximum ", allowed_maximum);
 
 
     if (observed_min > allowed_minimum && observed_max < allowed_maximum) {
@@ -876,7 +878,7 @@ var normalize_buffer = function(audio_obj, spec) {
             // audio_obj[property_buffer][index] = correction_factor * (1.0 * audio_obj[property_buffer][index] - observed_midpoint);
             audio_obj[property_buffer][index] = correction_factor * (audio_obj[property_buffer][index] - observed_midpoint);
 
-            console.log(index, " CCCCCCC input value ", prior_value, " output value ", audio_obj[property_buffer][index]);
+            // console.log(index, " CCCCCCC input value ", prior_value, " output value ", audio_obj[property_buffer][index]);
 
 
             if (post_processing_min > audio_obj[property_buffer][index]) {
@@ -889,7 +891,7 @@ var normalize_buffer = function(audio_obj, spec) {
             }
         };   
 
-        console.log(" CCCCCCC post_processing_min ", post_processing_min, " post_processing_max ", post_processing_max);
+        // console.log(" CCCCCCC post_processing_min ", post_processing_min, " post_processing_max ", post_processing_max);
      
     };
 };
@@ -910,6 +912,8 @@ exports.write_buffer_to_file = function(audio_obj, wav_output_filename, spec) {
     console.log("flag_normalize ", spec.flag_normalize);
 
     if (true == spec.flag_normalize) {
+
+    console.log("flag_normalize ", spec.flag_normalize, " about to call normalize_buffer in write_buffer_to_file");
 
         normalize_buffer(audio_obj, spec);
     }
