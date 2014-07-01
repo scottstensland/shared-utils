@@ -14,6 +14,9 @@ exports.get_random_in_range_inclusive_float = shared_utils.get_random_in_range_i
 exports.get_random_in_range_inclusive_int   = shared_utils.get_random_in_range_inclusive_int;
 exports.set_random_seed                     = shared_utils.set_random_seed;
 exports.diff_buffers                        = shared_utils.diff_buffers;
+exports.show_object                         = shared_utils.show_object;
+
+
 
 
 
@@ -232,6 +235,7 @@ exports.parse_wav = function(wav_input_file_obj, property_input_buffer, property
     console.log("ssssssssssss  num_samples ", num_samples);
 
 };       //      parse_wav
+// exports.parse_wav = parse_wav;
 
 // ---
 
@@ -287,6 +291,9 @@ exports.read_file_into_buffer = function(input_file_obj, property_buffer_raw_inp
                             input_file_obj[property_buffer_raw_input_file].length);
 
         // do something with data read from file - parse_wav
+
+        console.log("INNN read_file_into_buffer with cb_when_done.name ",cb_when_done.name);
+
         cb_when_done(input_file_obj, property_buffer_raw_input_file, property_buffer_input_file);
 
         // ---
@@ -297,6 +304,7 @@ exports.read_file_into_buffer = function(input_file_obj, property_buffer_raw_inp
     });
 
 };       //      read_file_into_buffer
+// exports.read_file_into_buffer = read_file_into_buffer;
 
 // ---
 

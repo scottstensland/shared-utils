@@ -37,14 +37,17 @@ var pop_audio_buffer = function (size_buff, given_samples_per_cycle) {
     // var count_num_cycles = 2;
 
     audio_obj.buffer = source_buffer;
-    audio_obj.running_index = 0;
-    audio_obj.num_samples_per_cycle = size_buff / count_num_cycles;
+    // audio_obj.running_index = 0;
+    var running_index = 0;
+    // audio_obj.num_samples_per_cycle = size_buff / count_num_cycles;
+
+    var num_samples_per_cycle = size_buff / count_num_cycles;
 
     console.log("count_num_cycles ", count_num_cycles, 
                 " num_samples_per_cycle ", audio_obj.num_samples_per_cycle);
 
 
-    var num_samples_per_cycle = audio_obj.num_samples_per_cycle;
+    // var num_samples_per_cycle = audio_obj.num_samples_per_cycle;
 
     var incr_theta = (2.0 * Math.PI) / num_samples_per_cycle;
 
@@ -56,10 +59,10 @@ var pop_audio_buffer = function (size_buff, given_samples_per_cycle) {
         var theta = 0.0;
         do {
 
-            audio_obj.buffer[audio_obj.running_index] = Math.sin(theta);
+            audio_obj.buffer[running_index] = Math.sin(theta);
 
             theta += incr_theta;
-            audio_obj.running_index++;
+            running_index++;
 
         } while (++index_buff < num_samples_per_cycle);
     }

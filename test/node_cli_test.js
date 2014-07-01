@@ -1,17 +1,43 @@
 #!/usr/bin/env node 
 
-
-// var shared_utils_obj = require("shared-utils");
 var shared_utils = require("../src/node_utils");
 var audio_utils  = require("../src/audio_utils");
 
 console.log("shared_utils ", shared_utils);
 
-
-// var shared_utils = shared_utils_obj.shared_utils();
-// var shared_utils = shared_utils_obj.shared_utils;
-
 // ---
+
+
+function cb_send_to_browser() {
+
+	console.log("TOP TOP TOP cb_send_to_browser");
+
+};
+
+
+function cb_after_reading_input_file_grow_curve(input_obj, property_buffer_raw_input_file, property_buffer_input_file) {
+
+    console.log("TOP TOP TOP cb_after_reading_input_file_grow_curve");
+
+    // sync NOT async ... output into buffer_input_file
+    shared_utils.parse_wav(input_obj, property_buffer_raw_input_file, property_buffer_input_file);
+
+    delete input_obj[property_buffer_raw_input_file];    // no longer need raw pre parse buffer
+
+    console.log("buffer size ", input_obj[property_buffer_input_file].length);
+    console.log("buffer size ", input_obj[property_buffer_input_file].length);
+    console.log("buffer size ", input_obj[property_buffer_input_file].length);
+
+
+	// var show_object = function (given_obj, given_label, given_mode, limit_size_buffer)
+
+    shared_utils.show_object(input_obj, "input_obj", "total", 88);
+
+    // var buff_size_from_file = input_obj[property_buffer_input_file].length;
+    // var size_buffer = 256;
+};
+
+// ------------------------------------------------------------------------------------ //
 
 var that = {},
 	spec = spec || { name : "Corinde Wiers"};
@@ -70,6 +96,64 @@ for (var index = 0; index < max_index; index++) {
 
     console.log(index, " pop_audio_buffer ", source_obj.buffer[index]);
 }
+
+
+// --- exercise both read and write WAV audio format file --- //
+
+console.log("... OK   exercise both read and write WAV audio format file  ");
+
+var property_buffer_raw_input_file = "buffer_raw_input_file";
+var property_buffer_input_file     = "buffer_input_file";
+
+// bbb
+
+// var audio_file_obj = {};
+
+// for (var property in audio_file_obj) {
+
+//     console.log("ttttttttt grow_tune property ", property, audio_file_obj[property]);
+// }
+
+var wav_file_input_obj = {};  // create stub object to which we attach .buffer
+
+// shared_utils.copy_properties_across_objects(audio_file_obj, wav_file_input_obj);
+
+// wav_file_input_obj.filename = audio_file_obj.wav_input_filename;
+// wav_file_input_obj.filename = "Elephant_sounds_rgUFu_hVhlk_roar_mono_tiny.wav";
+wav_file_input_obj.filename = "/tmp/source_wave.wav";
+
+// -rw-rw-r--  1 stens stens 8236 Jul  1 17:24 source_wave.wav
+// -rw-rw-r--  1 stens stens 8236 Jul  1 17:24 genome_synth_raw.wav
+// -rw-rw-r--  1 stens stens 8236 Jul  1 17:24 genome_synth_evolved.wav
+
+
+
+wav_file_input_obj[property_buffer_raw_input_file] = new Buffer(0);
+
+console.log("grow curve  read input file ", wav_file_input_obj.filename);
+console.log("grow curve  read input file ", wav_file_input_obj.filename);
+console.log("grow curve  read input file ", wav_file_input_obj.filename);
+console.log("grow curve  read input file ", wav_file_input_obj.filename);
+console.log("grow curve  read input file ", wav_file_input_obj.filename);
+console.log("grow curve  read input file ", wav_file_input_obj.filename);
+console.log("grow curve  read input file ", wav_file_input_obj.filename);
+console.log("grow curve  read input file ", wav_file_input_obj.filename);
+console.log("grow curve  read input file ", wav_file_input_obj.filename);
+console.log("grow curve  read input file ", wav_file_input_obj.filename);
+console.log("grow curve  read input file ", wav_file_input_obj.filename);
+
+// wav_file_input_obj.socket_conn = given_socket_conn; // to enable comm back to client
+
+// wav_file_input_obj.cb_to_client = send_answer_back_to_browser;
+wav_file_input_obj.cb_to_client = cb_send_to_browser;
+
+// wav_file_input_obj.flavor = given_flavor;
+
+shared_utils.read_file_into_buffer(wav_file_input_obj, property_buffer_raw_input_file,
+                                property_buffer_input_file,
+                                cb_after_reading_input_file_grow_curve);
+
+
 
 
 
