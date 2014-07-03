@@ -41,6 +41,78 @@
 	};
 	exports.get_random_in_range_inclusive_int = get_random_in_range_inclusive_int;
 
+	// ---
+
+	var convert_32_bit_float_into_unsigned_16_bit_int_lossy = function(input_32_bit_buffer) {
+
+		// this method is LOSSY - intended as preliminary step when saving audio into WAV format files
+
+		// output_16_bit_obj.buffer = new Buffer(0);// input buffer is 32 bit we want 16 bit so half it
+
+	    var size_source_buffer = input_32_bit_buffer.length;
+
+	    var new_16_bit_array = new Uint16Array(size_source_buffer);
+
+	    var max_valid_16_bit_integer = -1 + Math.pow(2, 16);
+
+	    console.log("max_valid_16_bit_integer ", max_valid_16_bit_integer);
+
+	    // ---
+
+	    var prelim_value;
+
+	    for (var index = 0; index < size_source_buffer; index++) {
+
+	        prelim_value = ~~((input_32_bit_buffer[index] + 1.0) * 32768);
+	        new_16_bit_array[index] = prelim_value;
+
+	        if (prelim_value !== new_16_bit_array[index]) {
+
+	        	console.error("ERROR - seeing mismatch btw prelim_value: ", prelim_value, 
+	        				" and post 16 bit: ", new_16_bit_array[index]);
+
+	        	// process.exit(8);
+
+	        	if (prelim_value > max_valid_16_bit_integer) {
+
+	        		new_16_bit_array[index] = max_valid_16_bit_integer;
+	        	} else if (prelim_value < 0) {
+
+	        		new_16_bit_array[index] = 0;
+	        	}
+	        };
+
+	        // output_16_bit_obj.buffer[index] = new_16_bit_array[index];
+	    }
+
+	    return new_16_bit_array;
+	};
+	exports.convert_32_bit_float_into_unsigned_16_bit_int_lossy = convert_32_bit_float_into_unsigned_16_bit_int_lossy;
+
+	// ---
+
+	var convert_16_bit_unsigned_int_to_32_bit_float = function(given_16_bit_buffer) {
+
+		// assumes input range of 16 bit ints :  0 to (2^16 - 1)  == 0 to 65535
+
+		var size_source_buffer = given_16_bit_buffer.length;
+
+		var max_valid_input_value = 2 >> 16 - 1;
+
+		console.log("max_valid_input_value ", max_valid_input_value);
+
+
+		var new_32_bit_array = new Float32Array(given_16_bit_buffer.length);
+
+		for (var index = 0; index < size_source_buffer; index++) {
+
+		    new_32_bit_array[index] = given_16_bit_buffer[index] / 32768 - 1.0;
+		}
+
+		return new_32_bit_array;
+	};
+	exports.convert_16_bit_unsigned_int_to_32_bit_float = convert_16_bit_unsigned_int_to_32_bit_float;
+
 	// ----------------------
 
 	var show_object = function (given_obj, given_label, given_mode, limit_size_buffer) {
