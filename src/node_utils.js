@@ -440,8 +440,8 @@ var write_wav = function(wav_file_obj) {
 
         console.log("ERROR - seeing error in write_stream");
         console.log(err);
-        process.exit(8);
-
+        // process.exit(8);
+        return;
     });
 
     // ---
@@ -563,7 +563,8 @@ var write_wav = function(wav_file_obj) {
                             " bytes it incorrectly contains : " + offset;
 
         console.log(err_msg);
-        process.exit(4);
+        // process.exit(4);
+        return;
     }
 
     // console.log("end of write ........... offset ", offset);
@@ -574,21 +575,32 @@ var write_wav = function(wav_file_obj) {
 
     // ---
 
-    // show_object_with_buffer(wav_file_obj, "spot_alpha");
-
-
-    // shared_utils.show_object(wav_file_obj, "total",
-    //         "spot_cccc_alpha", 0);
-
-
-// bbb
-// process.exit(9);
-
+/*
     write_stream.write(wav_file_obj.buffer);
 
     write_stream.end();
+*/
 
-    // console.log("write_wav is complete");
+
+    //prepare the length of the buffer to 4 bytes per float
+    // var buffer = new Buffer(data.length*4);
+    var little_endian_buffer = new Buffer(wav_file_obj.buffer.length*2);
+
+
+    for(var i = 0; i < wav_file_obj.buffer.length; i++){
+        //write the float in Little-Endian and move the offset
+        // buffer.writeFloatLE(data[i], i*4);
+        little_endian_buffer.writeUInt16LE(wav_file_obj.buffer[i], i*2);
+    }
+
+    write_stream.write(little_endian_buffer);
+
+
+
+    console.log("wav_file_obj.buffer ", wav_file_obj.buffer.length);
+    console.log("little_endian_buffer ", little_endian_buffer.length);
+
+    // process.exit(9);
 
     console.log("~~~~~~~~~ BOT write_wav ~~~~~~~~~");
 
@@ -991,7 +1003,7 @@ exports.write_buffer_to_wav_file = function(audio_obj, wav_output_filename, spec
     var output_16_bit_audio_obj = {};
 
     copy_properties_across_objects(audio_obj, output_16_bit_audio_obj);
-
+/*
     // convert_8_bit_ints_into_16_bit_ints(audio_obj, output_16_bit_audio_obj);
 
     // shared_utils.show_object(audio_obj, "total",
@@ -1030,6 +1042,26 @@ exports.write_buffer_to_wav_file = function(audio_obj, wav_output_filename, spec
     // show_buffer(wav_file_obj.buffer, wav_file_obj.buffer.length, 100);
 
     write_wav(output_16_bit_audio_obj);
+*/
+
+    output_16_bit_audio_obj.buffer = shared_utils.convert_32_bit_float_into_unsigned_16_bit_int_lossy(audio_obj[property_buffer]);
+
+    write_wav(output_16_bit_audio_obj);
+
+/*
+    // ----------- REMOVE below it just displays reverse of above - takes 16 bit int back into 32 bit float 
+
+    var resuscitated_32_bit_obj = {};
+
+    resuscitated_32_bit_obj.buffer = shared_utils.convert_16_bit_unsigned_int_to_32_bit_float(output_16_bit_audio_obj.buffer);
+
+
+    
+    shared_utils.show_object(resuscitated_32_bit_obj, "total",
+            "CWcwCWcwcwcw resuscitated_32_bit_obj CWcwCWcwcwcw", 10);
+
+*/
+
 
     console.log("BBB ___ write_buffer_to_file ___ ");
 

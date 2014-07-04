@@ -97,7 +97,7 @@ SIZE_BUFFER_SOURCE = 16;
 // SIZE_BUFFER_RENDER = 1024; // web audio node buffer size which does actual rendering
 
 var samples_per_cycle = SIZE_BUFFER_SOURCE;
-
+var samples_per_cycle = 4;
 // var samples_per_cycle = 64;
 // var samples_per_cycle = 256;
 
@@ -198,6 +198,10 @@ for (var index = 0; index < size_source_buffer; index++) {
     // console.log("new_16_bit_array ", index, new_16_bit_array[index], new_16_bit_array[index] / 32767 - 1.0);
     console.log("new_16_bit_array ", index, new_16_bit_array[index], new_16_bit_array[index] / 32768 - 1.0);
 }
+
+
+process.exit(8);
+
 
 
 new_32_bit_obj.buffer = shared_utils.convert_16_bit_unsigned_int_to_32_bit_float(new_16_bit_obj.buffer);
