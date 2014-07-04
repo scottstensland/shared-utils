@@ -68,8 +68,8 @@
 
 	        if (prelim_value !== new_16_bit_array[index]) {
 
-	        	console.error("ERROR - seeing mismatch btw prelim_value: ", prelim_value, 
-	        				" and post 16 bit: ", new_16_bit_array[index]);
+	        	// console.error("NOTICE - seeing mismatch btw prelim_value: ", prelim_value, 
+	        	// 			" and post 16 bit: ", new_16_bit_array[index]);
 
 	        	// process.exit(8);
 
@@ -87,26 +87,27 @@
 
 	    return new_16_bit_array;
 	};
-	exports.convert_32_bit_float_into_unsigned_16_bit_int_lossy = convert_32_bit_float_into_unsigned_16_bit_int_lossy;
+	exports.convert_32_bit_float_into_unsigned_16_bit_int_lossy = 
+			convert_32_bit_float_into_unsigned_16_bit_int_lossy;
 
 	// ---
 
-	var convert_16_bit_unsigned_int_to_32_bit_float = function(given_16_bit_buffer) {
+	var convert_16_bit_unsigned_int_to_32_bit_float = function(input_16_bit_int_buffer) {
 
 		// assumes input range of 16 bit ints :  0 to (2^16 - 1)  == 0 to 65535
 
-		var size_source_buffer = given_16_bit_buffer.length;
+		var size_source_buffer = input_16_bit_int_buffer.length;
 
 		var max_valid_input_value = 2 >> 16 - 1;
 
 		console.log("max_valid_input_value ", max_valid_input_value);
 
 
-		var new_32_bit_array = new Float32Array(given_16_bit_buffer.length);
+		var new_32_bit_array = new Float32Array(input_16_bit_int_buffer.length);
 
 		for (var index = 0; index < size_source_buffer; index++) {
 
-		    new_32_bit_array[index] = given_16_bit_buffer[index] / 32768 - 1.0;
+		    new_32_bit_array[index] = input_16_bit_int_buffer[index] / 32768 - 1.0;
 		}
 
 		return new_32_bit_array;
@@ -181,8 +182,10 @@
 
 			        		console.log(given_label, property, "\t", index, given_obj[property][index]);
 
-			        		min_value_seen = (given_obj[property][index] < min_value_seen) ? given_obj[property][index] : min_value_seen;
-			        		max_value_seen = (given_obj[property][index] > max_value_seen) ? given_obj[property][index] : max_value_seen;
+			        		min_value_seen = (given_obj[property][index] < min_value_seen) ? 
+			        						  given_obj[property][index] : min_value_seen;
+			        		max_value_seen = (given_obj[property][index] > max_value_seen) ? 
+			        						  given_obj[property][index] : max_value_seen;
 			    		}
 			    		// if (given_obj.buffer.length > local_size_buffer) {
 			    		if (given_obj[property].length > local_max_size_buffer) {
@@ -310,7 +313,8 @@
 
 	    if (size_buffer > left_obj.buffer.length || size_buffer > right_obj.buffer.length) {
 
-            console.error("ERROR - you defined master as : ", master, " yet buffer size is larger than other buffer");
+            console.error("ERROR - you defined master as : ", master, 
+            			  " yet buffer size is larger than other buffer");
             process.exit(8);
 	    };
 

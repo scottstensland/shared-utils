@@ -119,7 +119,7 @@ exports.parse_wav = function(wav_input_file_obj, property_input_buffer, property
             console.error("instead saw : ", RIFF);
             process.exit(8);
 
-            // return new Error(err_msg);  // stens TODO - this require caller to handle this error
+            // return new Error(err_msg);  // stens TODO - have caller to handle this error
 
             // https://stackoverflow.com/questions/7310521/node-js-best-practice-exception-handling
         }
@@ -318,6 +318,8 @@ exports.read_file_into_buffer = function(input_file_obj, property_buffer_raw_inp
 
 // exports.write_wav = function(wav_file_obj) {
 var write_wav = function(wav_file_obj) {
+
+    console.log("~~~~~~~~~ TOP write_wav ~~~~~~~~~");
 
     // --- iterate across all properties of given audio file object to see things like sample_rate
 
@@ -588,8 +590,10 @@ var write_wav = function(wav_file_obj) {
 
     // console.log("write_wav is complete");
 
+    console.log("~~~~~~~~~ BOT write_wav ~~~~~~~~~");
+
 };       //      write_wav
-exports.write_wav = write_wav;
+// exports.write_wav = write_wav;
 
 // ---
 
@@ -943,7 +947,7 @@ exports.normalize_buffer = normalize_buffer;
 
 // node_utils.write_buffer_to_file (audio_obj, wav_output_filename);
 
-exports.write_buffer_to_file = function(audio_obj, wav_output_filename, spec) {
+exports.write_buffer_to_wav_file = function(audio_obj, wav_output_filename, spec) {
 
     console.log("TTT ___ write_buffer_to_file ___ ");
 
@@ -1016,8 +1020,8 @@ exports.write_buffer_to_file = function(audio_obj, wav_output_filename, spec) {
     // console.log("output_16_bit_audio_obj.buffer ", output_16_bit_audio_obj.buffer);
 
 
-    // shared_utils.show_object(output_16_bit_audio_obj, "total",
-    //         "coccococo output_16_bit_audio_obj coccococo", output_16_bit_audio_obj.buffer.length);
+    shared_utils.show_object(output_16_bit_audio_obj, "total",
+            "coccococo output_16_bit_audio_obj coccococo", 10);
 
     // ---
 
@@ -1028,7 +1032,8 @@ exports.write_buffer_to_file = function(audio_obj, wav_output_filename, spec) {
     write_wav(output_16_bit_audio_obj);
 
     console.log("BBB ___ write_buffer_to_file ___ ");
-};
+
+};      //      write_buffer_to_file
 
 // ---
 

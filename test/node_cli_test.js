@@ -7,13 +7,11 @@ console.log("shared_utils ", shared_utils);
 
 // ---
 
-
 function cb_send_to_browser() {
 
 	console.log("TOP TOP TOP cb_send_to_browser");
 
 };
-
 
 function cb_after_reading_input_file_grow_curve(input_obj, property_buffer_raw_input_file, property_buffer_input_file) {
 
@@ -326,7 +324,7 @@ console.log("... OK   exercise both read and write WAV audio format file  ");
 
 var source_wave_filename = "/tmp/source_wave_test.wav";
 
-shared_utils.write_buffer_to_file(source_obj, source_wave_filename);
+shared_utils.write_buffer_to_wav_file(source_obj, source_wave_filename);
 
 console.log("source_wave_filename   ", source_wave_filename);
 
