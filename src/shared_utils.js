@@ -116,6 +116,186 @@
 
 	// ----------------------
 
+
+	var convert_16_bit_signed_int_to_32_bit_float = function(input_8_bit_int_buffer) {
+
+		// input buffer is 8 bit integers which need to get shifted and OR'd into 16 bit signed integers
+		//              which is then converted into 32 bit floats
+		//
+		// This does NOT fully utilize 32 bits since input is only 16 bit
+
+		// assumes input range of 16 bit ints :  0 to (2^16 - 1)  == 0 to 65535
+		// ONLY after the shift and logical OR happens from a pair of 8 bit integers
+
+		var size_source_buffer = input_8_bit_int_buffer.length;
+
+		var max_valid_input_value = 2 >> 16 - 1;
+
+		console.log("max_valid_input_value ", max_valid_input_value);
+
+
+		var new_32_bit_array = new Float32Array(input_8_bit_int_buffer.length / 2);
+
+		var max_value_seen = -999.9;
+		var min_value_seen =  999.9;
+
+		var value_16_bit_signed_int;
+		var index_32_bit_floats = 0;
+
+		for (var index = 0; index < size_source_buffer; index += 2, index_32_bit_floats++) {
+
+			console.log(index, input_8_bit_int_buffer[index]);
+
+			value_16_bit_signed_int = (input_8_bit_int_buffer[index] << 8) | input_8_bit_int_buffer[index + 1];
+
+			if (value_16_bit_signed_int < min_value_seen) {
+
+				min_value_seen = value_16_bit_signed_int;
+
+			} else if (value_16_bit_signed_int > max_value_seen) {
+
+				max_value_seen = value_16_bit_signed_int;
+			}
+
+		    // new_32_bit_array[index] = input_8_bit_int_buffer[index] / 32768 - 1.0;
+		    // new_32_bit_array[index_32_bit_floats] = ((0 < value_16_bit_signed_int) ? 
+		    // 											  value_16_bit_signed_int / 32768 : 
+		    // 											  value_16_bit_signed_int / 32767) - 1.0;
+
+
+		    new_32_bit_array[index_32_bit_floats] = ((0 < value_16_bit_signed_int) ? 
+		    											 value_16_bit_signed_int / 0x8000 : 
+		    											 value_16_bit_signed_int / 0x7FFF) - 1;
+
+		    console.log(index, input_8_bit_int_buffer[index], input_8_bit_int_buffer[index + 1], 
+		    					value_16_bit_signed_int, new_32_bit_array[index_32_bit_floats]);
+		};
+
+		console.log("max_value_seen ", max_value_seen, " min_value_seen ", min_value_seen);
+
+		return new_32_bit_array;
+	};
+	exports.convert_16_bit_signed_int_to_32_bit_float = convert_16_bit_signed_int_to_32_bit_float;
+
+	// ----------------------
+
+
+/*
+	var convert_32_bit_float_into_signed_16_bit_int_lossy = function(input_32_bit_buffer) {
+
+		// this method is LOSSY - intended as preliminary step when saving audio into WAV format files
+
+		// output_16_bit_obj.buffer = new Buffer(0);// input buffer is 32 bit we want 16 bit so half it
+
+	    var size_source_buffer = input_32_bit_buffer.length;
+
+	    var new_16_bit_signed_int = new Int16Array(size_source_buffer);
+
+	    var max_valid_16_bit_integer = -1 + Math.pow(2, 16);
+
+	    console.log("max_valid_16_bit_integer ", max_valid_16_bit_integer);
+
+	    // ---
+
+	    var prelim_value;
+
+	    for (var index = 0; index < size_source_buffer; index++) {
+
+	        // prelim_value = ~~((input_32_bit_buffer[index] + 1.0) * 32768);
+	        prelim_value = ~~((input_32_bit_buffer[index] < 0) ? input_32_bit_buffer[index] * 0x8000 : 
+	        													 input_32_bit_buffer[index] * 0x7FFF);
+	        new_16_bit_signed_int[index] = prelim_value;
+
+	        console.error(index, input_32_bit_buffer[index], prelim_value, new_16_bit_signed_int[index]);
+
+	        if (prelim_value !== new_16_bit_signed_int[index]) {
+
+	        	console.error("NOTICE - seeing mismatch btw prelim_value: ", prelim_value, 
+	        				" and post 16 bit: ", new_16_bit_signed_int[index]);
+
+	        	// process.exit(8);
+
+	        	if (prelim_value > max_valid_16_bit_integer) {
+
+	        		new_16_bit_signed_int[index] = max_valid_16_bit_integer;
+	        	} else if (prelim_value < 0) {
+
+	        		new_16_bit_signed_int[index] = 0;
+	        	}
+	        };
+	    }
+
+	    return new_16_bit_signed_int;
+	};
+	exports.convert_32_bit_float_into_signed_16_bit_int_lossy = 
+			convert_32_bit_float_into_signed_16_bit_int_lossy;
+*/
+
+
+
+	var convert_32_bit_float_into_signed_16_bit_int_lossy = function(input_32_bit_buffer) {
+
+
+		// this method is LOSSY - intended as preliminary step when saving audio into WAV format files
+		//                        output is a byte array where the 16 bit output format 
+		//						  is spread across two bytes in little endian ordering
+
+
+	    var size_source_buffer = input_32_bit_buffer.length;
+
+	    // var new_16_bit_signed_int = new Int16Array(size_source_buffer);
+
+	    // var max_valid_16_bit_integer = -1 + Math.pow(2, 16);
+
+	    var buffer_byte_array = new Buffer(size_source_buffer * 2);
+
+	    // console.log("max_valid_16_bit_integer ", max_valid_16_bit_integer);
+
+	    // ---
+
+	    var value_16_bit_signed_int;
+	    var index_byte = 0;
+
+	    for (var index = 0; index < size_source_buffer; index++) {
+
+	        // prelim_value = ~~((input_32_bit_buffer[index] + 1.0) * 32768);
+	        value_16_bit_signed_int = ~~((input_32_bit_buffer[index] < 0) ? input_32_bit_buffer[index] * 0x8000 : 
+	        													 input_32_bit_buffer[index] * 0x7FFF);
+	        // new_16_bit_signed_int[index] = prelim_value;
+
+	        buffer_byte_array[index_byte] = value_16_bit_signed_int & 0xFF;
+	        buffer_byte_array[index_byte + 1] = (value_16_bit_signed_int >> 8) & 0xFF;
+
+	        console.error(index, input_32_bit_buffer[index], value_16_bit_signed_int,
+	        				buffer_byte_array[index_byte], buffer_byte_array[index_byte + 1]);
+
+	        /*
+	        if (prelim_value !== new_16_bit_signed_int[index]) {
+
+	        	console.error("NOTICE - seeing mismatch btw prelim_value: ", prelim_value, 
+	        				" and post 16 bit: ", new_16_bit_signed_int[index]);
+
+	        	// process.exit(8);
+
+	        	if (prelim_value > max_valid_16_bit_integer) {
+
+	        		new_16_bit_signed_int[index] = max_valid_16_bit_integer;
+	        	} else if (prelim_value < 0) {
+
+	        		new_16_bit_signed_int[index] = 0;
+	        	}
+	        };  */
+
+	        index_byte += 2;
+	    };
+
+	    return buffer_byte_array;
+	};
+	exports.convert_32_bit_float_into_signed_16_bit_int_lossy = 
+			convert_32_bit_float_into_signed_16_bit_int_lossy;
+			
+	// ----------------------
+
 	var show_object = function (given_obj, given_label, given_mode, limit_size_buffer) {
 
 		console.log("_______TOP show_object ", given_label, given_mode);
