@@ -19,7 +19,7 @@ exports.convert_32_bit_float_into_unsigned_16_bit_int_lossy = shared_utils.conve
 exports.convert_32_bit_float_into_signed_16_bit_int_lossy   = shared_utils.convert_32_bit_float_into_signed_16_bit_int_lossy;
 exports.convert_16_bit_unsigned_int_to_32_bit_float         = shared_utils.convert_16_bit_unsigned_int_to_32_bit_float;
 exports.convert_16_bit_signed_int_to_32_bit_float           = shared_utils.convert_16_bit_signed_int_to_32_bit_float;
-exports.write_32_bit_buffer_to_wav_file                     = shared_utils.write_32_bit_buffer_to_wav_file;
+// exports.write_32_bit_buffer_to_wav_file                     = shared_utils.write_32_bit_buffer_to_wav_file;
 
 
 
@@ -262,8 +262,12 @@ exports.read_file_into_buffer = function(input_file_obj, property_buffer_raw_inp
 
     var input_read_stream = fs.createReadStream(input_file_obj.filename);
 
-    var max_print_count = 5;
-    var curr_print_count = 0;
+    // var max_print_count = 5;
+    // var curr_print_count = 0;
+
+    var current_byte_count = 0;
+
+    // var size_limit_buffer;
 
     input_read_stream.on('readable', function() {
 
@@ -273,21 +277,31 @@ exports.read_file_into_buffer = function(input_file_obj, property_buffer_raw_inp
 
         while (null !== (newData = input_read_stream.read())) {
 
-            if (curr_print_count < max_print_count) {
+            // if (curr_print_count < max_print_count) {
 
-                console.log('CCCCCC binary newData length this callback cycle is ', newData.length);
-            }
+            console.log('CCCCCC binary newData length this callback cycle is ', newData.length);
+            // }
+
+            // size_limit_buffer = (newData.length < limit_size_input_file_buffer) ?
+            //                      newData.length : limit_size_input_file_buffer;
+
+            // console.log("size_limit_buffer ", size_limit_buffer);
 
             input_file_obj[property_buffer_raw_input_file] = 
                     Buffer.concat([input_file_obj[property_buffer_raw_input_file], newData], 
                                    input_file_obj[property_buffer_raw_input_file].length+newData.length);
 
-            if (curr_print_count < max_print_count) {
+            // input_file_obj[property_buffer_raw_input_file] = 
+            //         Buffer.concat([input_file_obj[property_buffer_raw_input_file], newData], 
+            //                        input_file_obj[property_buffer_raw_input_file].length+size_limit_buffer);
 
-                console.log('binary input_file_obj.raw_buffer length post concat  ', 
+
+            // if (curr_print_count < max_print_count) {
+
+            console.log('binary input_file_obj.raw_buffer length post concat  ', 
                             input_file_obj[property_buffer_raw_input_file].length);
-            }
-            curr_print_count++;
+            // }
+            // curr_print_count++;
         }
     });
 
@@ -1060,7 +1074,7 @@ exports.write_32_bit_buffer_to_wav_file = function(audio_obj, wav_output_filenam
 
     
     shared_utils.show_object(audio_obj, "total",
-            "corindddeeee audio_obj corindddeeee", 100);
+            "corindddeeee audio_obj corindddeeee", 10);
 
 
     // output_16_bit_audio_obj.buffer = shared_utils.convert_32_bit_float_into_unsigned_16_bit_int_lossy(audio_obj[property_buffer]);
@@ -1069,9 +1083,10 @@ exports.write_32_bit_buffer_to_wav_file = function(audio_obj, wav_output_filenam
 // bbb
 
     shared_utils.show_object(output_16_bit_audio_obj, "total",
-            "weeeirrss  output_16_bit_audio_obj weeeirrss", 100);
+            "weeeirrss  output_16_bit_audio_obj weeeirrss", 10);
 
 
+    return;
 
     write_wav(output_16_bit_audio_obj);
 

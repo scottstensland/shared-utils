@@ -116,7 +116,6 @@
 
 	// ----------------------
 
-
 	var convert_16_bit_signed_int_to_32_bit_float = function(input_8_bit_int_buffer) {
 
 		// input buffer is 8 bit integers which need to get shifted and OR'd into 16 bit signed integers
@@ -133,7 +132,6 @@
 
 		console.log("max_valid_input_value ", max_valid_input_value);
 
-
 		var new_32_bit_array = new Float32Array(input_8_bit_int_buffer.length / 2);
 
 		var max_value_seen = -999.9;
@@ -142,9 +140,11 @@
 		var value_16_bit_signed_int;
 		var index_32_bit_floats = 0;
 
+		var max_to_show = 10;
+
 		for (var index = 0; index < size_source_buffer; index += 2, index_32_bit_floats++) {
 
-			console.log(index, input_8_bit_int_buffer[index]);
+			// console.log(index, input_8_bit_int_buffer[index]);
 
 			value_16_bit_signed_int = (input_8_bit_int_buffer[index] << 8) | input_8_bit_int_buffer[index + 1];
 
@@ -162,13 +162,14 @@
 		    // 											  value_16_bit_signed_int / 32768 : 
 		    // 											  value_16_bit_signed_int / 32767) - 1.0;
 
-
 		    new_32_bit_array[index_32_bit_floats] = ((0 < value_16_bit_signed_int) ? 
 		    											 value_16_bit_signed_int / 0x8000 : 
 		    											 value_16_bit_signed_int / 0x7FFF) - 1;
+		    if (index < max_to_show) {
 
-		    console.log(index, input_8_bit_int_buffer[index], input_8_bit_int_buffer[index + 1], 
-		    					value_16_bit_signed_int, new_32_bit_array[index_32_bit_floats]);
+			    console.log("c16_32", index, input_8_bit_int_buffer[index], input_8_bit_int_buffer[index + 1], 
+			    					value_16_bit_signed_int, new_32_bit_array[index_32_bit_floats]);	
+		    }
 		};
 
 		console.log("max_value_seen ", max_value_seen, " min_value_seen ", min_value_seen);
@@ -240,6 +241,7 @@
 		//                        output is a byte array where the 16 bit output format 
 		//						  is spread across two bytes in little endian ordering
 
+		console.log("TOP convert_32_bit_float_into_signed_16_bit_int_lossy");
 
 	    var size_source_buffer = input_32_bit_buffer.length;
 
@@ -256,6 +258,8 @@
 	    var value_16_bit_signed_int;
 	    var index_byte = 0;
 
+	    var max_to_show = 10;
+
 	    for (var index = 0; index < size_source_buffer; index++) {
 
 	        // prelim_value = ~~((input_32_bit_buffer[index] + 1.0) * 32768);
@@ -266,8 +270,12 @@
 	        buffer_byte_array[index_byte] = value_16_bit_signed_int & 0xFF;
 	        buffer_byte_array[index_byte + 1] = (value_16_bit_signed_int >> 8) & 0xFF;
 
-	        console.error(index, input_32_bit_buffer[index], value_16_bit_signed_int,
-	        				buffer_byte_array[index_byte], buffer_byte_array[index_byte + 1]);
+	        if (index < max_to_show) {
+
+		        console.log(index, input_32_bit_buffer[index], value_16_bit_signed_int,
+		        				buffer_byte_array[index_byte], buffer_byte_array[index_byte + 1]);	        	
+	        }
+
 
 	        /*
 	        if (prelim_value !== new_16_bit_signed_int[index]) {
