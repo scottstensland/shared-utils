@@ -236,7 +236,6 @@
 
 	var convert_32_bit_float_into_signed_16_bit_int_lossy = function(input_32_bit_buffer) {
 
-
 		// this method is LOSSY - intended as preliminary step when saving audio into WAV format files
 		//                        output is a byte array where the 16 bit output format 
 		//						  is spread across two bytes in little endian ordering
@@ -263,7 +262,7 @@
 	    for (var index = 0; index < size_source_buffer; index++) {
 
 	        // prelim_value = ~~((input_32_bit_buffer[index] + 1.0) * 32768);
-	        value_16_bit_signed_int = ~~((input_32_bit_buffer[index] < 0) ? input_32_bit_buffer[index] * 0x8000 : 
+	        value_16_bit_signed_int = ~~((0 < input_32_bit_buffer[index]) ? input_32_bit_buffer[index] * 0x8000 : 
 	        													 input_32_bit_buffer[index] * 0x7FFF);
 	        // new_16_bit_signed_int[index] = prelim_value;
 
@@ -275,7 +274,6 @@
 		        console.log(index, input_32_bit_buffer[index], value_16_bit_signed_int,
 		        				buffer_byte_array[index_byte], buffer_byte_array[index_byte + 1]);	        	
 	        }
-
 
 	        /*
 	        if (prelim_value !== new_16_bit_signed_int[index]) {

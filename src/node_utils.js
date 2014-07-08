@@ -22,10 +22,6 @@ exports.convert_16_bit_signed_int_to_32_bit_float           = shared_utils.conve
 // exports.write_32_bit_buffer_to_wav_file                     = shared_utils.write_32_bit_buffer_to_wav_file;
 
 
-
-
-
-
 exports.pop_audio_buffer                                = audio_utils.pop_audio_buffer;
 
 // ---
@@ -602,10 +598,11 @@ var write_wav = function(wav_file_obj) {
     write_stream.end();
 */
 
-
+/*
     //prepare the length of the buffer to 4 bytes per float
     // var buffer = new Buffer(data.length*4);
-    var little_endian_buffer = new Buffer(wav_file_obj.buffer.length*2); // *2 since going from 16 bits to 8 bits
+    // var little_endian_buffer = new Buffer(wav_file_obj.buffer.length*2); // *2 since going from 16 bits to 8 bits
+    var little_endian_buffer = new Buffer(wav_file_obj.buffer.length); // *2 since going from 16 bits to 8 bits
 
 
     for(var i = 0; i < wav_file_obj.buffer.length; i++){
@@ -618,11 +615,14 @@ var write_wav = function(wav_file_obj) {
     }
 
     write_stream.write(little_endian_buffer);
+*/
+
+    write_stream.write(wav_file_obj.buffer);
 
 
 
     console.log("wav_file_obj.buffer ", wav_file_obj.buffer.length);
-    console.log("little_endian_buffer ", little_endian_buffer.length);
+    // console.log("little_endian_buffer ", little_endian_buffer.length);
 
     // process.exit(9);
 
@@ -1085,8 +1085,7 @@ exports.write_32_bit_buffer_to_wav_file = function(audio_obj, wav_output_filenam
     shared_utils.show_object(output_16_bit_audio_obj, "total",
             "weeeirrss  output_16_bit_audio_obj weeeirrss", 10);
 
-
-    return;
+    // return;
 
     write_wav(output_16_bit_audio_obj);
 

@@ -103,17 +103,32 @@ var samples_per_cycle = 4;
 
 var source_obj = {};
 
-var source_obj = audio_utils.pop_audio_buffer(SIZE_BUFFER_SOURCE, samples_per_cycle);
+// var source_obj = audio_utils.pop_audio_buffer(SIZE_BUFFER_SOURCE, samples_per_cycle);
 
 // var max_index = 3;
-var max_index = SIZE_BUFFER_SOURCE;
+// var max_index = SIZE_BUFFER_SOURCE;
 
-for (var index = 0; index < max_index; index++) {
+for (var index = 0; index < source_obj.buffer.length; index++) {
 
-    console.log(index, " pop_audio_buffer ", source_obj.buffer[index]);
+    console.log(index, " source_obj ", source_obj.buffer[index]);
 }
 
 // --- take 32 bit float buffer ... convert into 16 bit integer array then back into 32 bit float buffer
+
+var output_16_bit_audio_obj = {};
+
+output_16_bit_audio_obj.buffer = shared_utils.convert_32_bit_float_into_signed_16_bit_int_lossy(source_obj.buffer);
+
+
+for (var index = 0; index < output_16_bit_audio_obj.buffer.length; index++) {
+
+    console.log(index, " output_16_bit_audio_obj ", output_16_bit_audio_obj.buffer[index]);
+}
+
+
+
+return;
+
 
 /*
 var bigger = 0x80;    // 128
@@ -295,7 +310,11 @@ process.exit(8);
 
 var output_16_bit_audio_obj = {};
 
-shared_utils.convert_32_bit_floats_into_16_bit_ints(source_obj, output_16_bit_audio_obj);
+// shared_utils.convert_32_bit_floats_into_16_bit_ints(source_obj, output_16_bit_audio_obj);
+
+output_16_bit_audio_obj.buffer = shared_utils.convert_32_bit_float_into_signed_16_bit_int_lossy(source_obj.buffer);
+
+
 
 shared_utils.show_object(output_16_bit_audio_obj, "total",
             "teeeest output_16_bit_audio_obj teeeest", output_16_bit_audio_obj.buffer.length);
