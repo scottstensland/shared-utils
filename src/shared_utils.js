@@ -215,16 +215,19 @@
 		//                        output is a byte array where the 16 bit output format 
 		//						  is spread across two bytes in little endian ordering
 
-		console.log("TOP convert_32_bit_float_into_signed_16_bit_int_lossy");
-
 	    var size_source_buffer = input_32_bit_buffer.length;
+
+		console.log("TOP convert_32_bit_float_into_signed_16_bit_int_lossy  buff size ", size_source_buffer);
 
 	    // var new_16_bit_signed_int = new Int16Array(size_source_buffer);
 
 	    // var max_valid_16_bit_integer = -1 + Math.pow(2, 16);
 
-	    var buffer_byte_array = new Buffer(size_source_buffer * 2);
+	    // var buffer_byte_array = new Buffer(size_source_buffer * 2); // NO fails to store negative numbers
+	    // var buffer_byte_array = new Int8Array(size_source_buffer * 2); // Int8Array 8-bit twos complement signed integer
+	    var buffer_byte_array = new Int16Array(size_source_buffer * 2); // Int8Array 8-bit twos complement signed integer
 
+// bbb
 	    // console.log("max_valid_16_bit_integer ", max_valid_16_bit_integer);
 
 	    // ---
@@ -232,7 +235,7 @@
 	    var value_16_bit_signed_int;
 	    var index_byte = 0;
 
-	    var max_to_show = 10;
+	    var max_to_show = 9;
 
 	    for (var index = 0; index < size_source_buffer; index++) {
 
@@ -249,12 +252,15 @@
 
 	        buffer_byte_array[index_byte] = value_16_bit_signed_int & 0xFF;
 	        // buffer_byte_array[index_byte + 1] = (value_16_bit_signed_int >> 8) & 0xFF;
-	        buffer_byte_array[index_byte + 1] = (value_16_bit_signed_int >> 8);
+	        var byte_two_of_two = (value_16_bit_signed_int >> 8);
+
+
+	        buffer_byte_array[index_byte + 1] = byte_two_of_two;
 
 	        if (index < max_to_show) {
 
-		        console.log(index, input_32_bit_buffer[index], value_16_bit_signed_int,
-		        				buffer_byte_array[index_byte], buffer_byte_array[index_byte + 1]);	        	
+		        console.log(index, " c32bfTO16bs ", input_32_bit_buffer[index], value_16_bit_signed_int,
+		        				buffer_byte_array[index_byte], buffer_byte_array[index_byte + 1], byte_two_of_two);	        	
 	        }
 
 	        /*
@@ -276,6 +282,17 @@
 
 	        index_byte += 2;
 	    };
+
+	    // ---
+
+	    // var zap_this_obj = {};
+
+	    // zap_this_obj.buffer = buffer_byte_array;
+
+    	// show_object(zap_this_obj, " TTccwwEE zap_this_obj 16 bit signed int ", "total", 10);
+
+
+	    // ---
 
 	    return buffer_byte_array;
 	};

@@ -600,13 +600,24 @@ var write_wav = function(wav_file_obj) {
 
     write_stream.end();
 */
+// bbb
 
-/*
     //prepare the length of the buffer to 4 bytes per float
     // var buffer = new Buffer(data.length*4);
     // var little_endian_buffer = new Buffer(wav_file_obj.buffer.length*2); // *2 since going from 16 bits to 8 bits
-    var little_endian_buffer = new Buffer(wav_file_obj.buffer.length); // *2 since going from 16 bits to 8 bits
+    // var little_endian_buffer = new Buffer(wav_file_obj.buffer.length); // *2 since going from 16 bits to 8 bits
+    // var little_endian_buffer = new Buffer(wav_file_obj.buffer.length); // *2 since going from 16 bits to 8 bits
+    // var little_endian_buffer = new Int16Array(wav_file_obj.buffer.length); // *2 since going from 16 bits to 8 bits
 
+
+    var buffer_to_file = new Buffer( new Int16Array(wav_file_obj.buffer) );
+
+
+    write_stream.write(buffer_to_file);
+
+
+    /*
+    var curr_value;
 
     for(var i = 0; i < wav_file_obj.buffer.length; i++){
         //write the float in Little-Endian and move the offset
@@ -614,20 +625,28 @@ var write_wav = function(wav_file_obj) {
         // little_endian_buffer.writeUInt16LE(wav_file_obj.buffer[i], i*2);
 
         // little_endian_buffer.writeFloatLE(wav_file_obj.buffer[i], i*2);
-        little_endian_buffer.writeFloatLE(wav_file_obj.buffer[i], i);
-    }
+        // little_endian_buffer.writeFloatLE(wav_file_obj.buffer[i], i);
+
+        curr_value = (wav_file_obj.buffer[i + 1] << 8) | wav_file_obj.buffer;
+
+        // little_endian_buffer.writeInt16LE(curr_value, i);
+        little_endian_buffer[i] = curr_value;
+    };
 
     write_stream.write(little_endian_buffer);
-*/
+    */
+
+/*
+    console.log("aa bb cc dd ee ff");
+
 
     write_stream.write(wav_file_obj.buffer);
-
+*/
 
 
     console.log("wav_file_obj.buffer ", wav_file_obj.buffer.length);
     // console.log("little_endian_buffer ", little_endian_buffer.length);
 
-    // process.exit(9);
 
     console.log("~~~~~~~~~ BOT write_wav ~~~~~~~~~");
 
@@ -984,8 +1003,6 @@ exports.normalize_buffer = normalize_buffer;
 
 // ---
 
-// node_utils.write_buffer_to_file (audio_obj, wav_output_filename);
-
 exports.write_32_bit_buffer_to_wav_file = function(audio_obj, wav_output_filename, spec) {
 
     console.log("TTT ___ write_32_bit_buffer_to_wav_file ___ ");
@@ -998,7 +1015,8 @@ exports.write_32_bit_buffer_to_wav_file = function(audio_obj, wav_output_filenam
 
     // var spec = spec || {};
 
-    var spec = spec || { flag_normalize : true };
+    var spec = spec || { flag_normalize : false };
+    // var spec = spec || { flag_normalize : true };
 
     if (typeof spec.property_buffer !== "undefined") {
 
@@ -1081,16 +1099,22 @@ exports.write_32_bit_buffer_to_wav_file = function(audio_obj, wav_output_filenam
 
 
     // output_16_bit_audio_obj.buffer = shared_utils.convert_32_bit_float_into_unsigned_16_bit_int_lossy(audio_obj[property_buffer]);
-    output_16_bit_audio_obj.buffer = shared_utils.convert_32_bit_float_into_signed_16_bit_int_lossy(audio_obj[property_buffer]);
+    // output_16_bit_audio_obj.buffer = shared_utils.convert_32_bit_float_into_signed_16_bit_int_lossy(audio_obj[property_buffer]);
 
 // bbb
 
-    shared_utils.show_object(output_16_bit_audio_obj, "total",
-            "weeeirrss  output_16_bit_audio_obj weeeirrss", 10);
+
+
+
+
+    // shared_utils.show_object(output_16_bit_audio_obj, "total",
+    //         "weeeirrss  output_16_bit_audio_obj weeeirrss", 10);
 
     // return;
 
     write_wav(output_16_bit_audio_obj);
+    // write_wav(audio_obj[property_buffer]);
+    // write_wav(audio_obj);
 
 /*
     // ----------- REMOVE below it just displays reverse of above - takes 16 bit int back into 32 bit float 
@@ -1109,42 +1133,6 @@ exports.write_32_bit_buffer_to_wav_file = function(audio_obj, wav_output_filenam
     console.log("BBB ___ write_32_bit_buffer_to_wav_file ___ ");
 
 };      //      write_32_bit_buffer_to_wav_file
-
-// ---
-
-/*
-var write_32_bit_buffer_to_wav_file = function(buffer_32_bit_float) {
-
-console.log("buffer_32_bit_float size ", buffer_32_bit_float.length);
-
-var source_wave_filename = "output_from_32_bit_floats.wav";
-
-
-console.log("source_wave_filename   ", source_wave_filename);
-
-var buffer_16_bit_signed_byte_array = convert_32_bit_float_into_signed_16_bit_int_lossy(buffer_32_bit_float);
-
-
-// show_object(buffer_16_bit_signed_byte_array, "total",
-//             "JuJuJuJu buffer_16_bit_signed_byte_array UjUjUjUjUj", 100);
-
-console.log("will of Allah");
-
-
-// bbb
-// return;
-
-    write_wav(output_16_bit_audio_obj);
-
-
-// write_buffer_to_wav_file(buffer_16_bit_signed_byte_array, source_wave_filename);
-
-
-};
-exports.write_32_bit_buffer_to_wav_file = write_32_bit_buffer_to_wav_file;
-
-*/
-
 
 // ---
 
