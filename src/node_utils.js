@@ -15,11 +15,14 @@ exports.get_random_in_range_inclusive_int               = shared_utils.get_rando
 exports.set_random_seed                                 = shared_utils.set_random_seed;
 exports.diff_buffers                                    = shared_utils.diff_buffers;
 exports.show_object                                     = shared_utils.show_object;
+
 exports.convert_32_bit_float_into_unsigned_16_bit_int_lossy = shared_utils.convert_32_bit_float_into_unsigned_16_bit_int_lossy;
-exports.convert_32_bit_float_into_signed_16_bit_int_lossy   = shared_utils.convert_32_bit_float_into_signed_16_bit_int_lossy;
 exports.convert_16_bit_unsigned_int_to_32_bit_float         = shared_utils.convert_16_bit_unsigned_int_to_32_bit_float;
+
+
 exports.convert_16_bit_signed_int_to_32_bit_float           = shared_utils.convert_16_bit_signed_int_to_32_bit_float;
-// exports.write_32_bit_buffer_to_wav_file                     = shared_utils.write_32_bit_buffer_to_wav_file;
+exports.convert_32_bit_float_into_signed_16_bit_int_lossy   = shared_utils.convert_32_bit_float_into_signed_16_bit_int_lossy;
+
 
 
 exports.pop_audio_buffer                                = audio_utils.pop_audio_buffer;
