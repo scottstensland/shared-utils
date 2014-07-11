@@ -1,6 +1,12 @@
 
 (function(exports) {
 
+	/*
+
+		hierarchical agglomerative clustering - bottom up clustering approach
+
+	*/
+
 	var shared_utils = require('./shared_utils');
 
 	var get_random = shared_utils.get_random_in_range_inclusive_float;	// default
@@ -20,6 +26,12 @@
 
 	var curve_pairs_already_calculated = {}; // during distance calc record pairings of curve A and curve B
 											 // to avoid redundant calc of same pair when visiting B once A has happened
+
+	var hierarchical_cluster = []; // bottom up tree start from each curve number, branching up through cluster layers
+	var curr_cluster_depth = 0;
+	var centroid = "centroid";
+
+	var all_clusters = {};
 
 	// ---
 
@@ -149,10 +161,24 @@
 		return total_distance;	
 	};
 
+	// ---
 
-	var do_clustering = function() {
+	var gen_pair_str = function(left_number, right_number) {
+
+		return (left_number < right_number) ? (left_number  + ":" + right_number) :
+											  (right_number + ":" + left_number);
+	};
+
+
+	var do_clustering = function() {		//		hierarchical agglomerative clustering
 
 		console.log("_________ do_clustering _____________");
+
+
+		// var hierarchical_cluster = [];
+		// var curr_cluster_depth = 0;
+
+		var curr_cluster_this_depth_level = 0;
 
 		for (var curr_curve = 0; curr_curve < max_num_curves; curr_curve++) {
 
@@ -166,14 +192,15 @@
 
 				if (curr_inner_curve === curr_curve) continue; // skip over self
 
-				// all_curves[curr_curve] = curr_curve_samples;
+				// var combo_key = (curr_curve < curr_inner_curve) ? (curr_curve       + ":" + curr_inner_curve) :
+				// 												  (curr_inner_curve + ":" + curr_curve);
 
-				var combo_key = (curr_curve < curr_inner_curve) ? ("" + curr_curve + ":" + curr_inner_curve) :
-																  ("" + curr_inner_curve + ":" + curr_curve);
+				var combo_key = gen_pair_str(curr_curve, curr_inner_curve);
+
 
 				if (curve_pairs_already_calculated.hasOwnProperty(combo_key)) {
 
-					// console.log("already did calc on ", combo_key);
+					//   already did calc on this pair of curves ... no need to redo same calculation
 
 					curr_distance = curve_pairs_already_calculated[combo_key];
 
@@ -194,6 +221,53 @@
 			};
 
 			console.log(curr_curve, "closest_other_inner_curve ", closest_other_inner_curve, min_distance);
+
+			// --- burrow down to find or create cluster to put current pair of curves --- //
+
+			var clusters_this_level = {};
+
+			if (hierarchical_cluster.hasOwnProperty(curr_cluster_depth)) {
+
+				clusters_this_level = hierarchical_cluster[curr_cluster_depth];
+			};
+
+			var this_cluster_str;
+
+			if (clusters_this_level.hasOwnProperty(closest_other_inner_curve)) {
+
+				this_cluster_str = clusters_this_level[closest_other_inner_curve];
+			};
+
+			if (typeof this_cluster_str === "undefined") {
+
+				console.log("pppppp curr_cluster_depth ", curr_cluster_depth, 
+							" curr_cluster_this_depth_level ", curr_cluster_this_depth_level);
+
+				this_cluster_str = curr_cluster_depth + ":" + curr_cluster_this_depth_level;
+
+				curr_cluster_this_depth_level++;
+			};
+
+			console.log("ssssssssssss  this_cluster_str ", this_cluster_str);
+
+			var this_cluster = {};
+
+			if (all_clusters.hasOwnProperty(this_cluster_str)) {
+
+				this_cluster = all_clusters[this_cluster_str];
+			};
+
+			this_cluster[curr_curve]				= this_cluster_str;
+			this_cluster[closest_other_inner_curve] = this_cluster_str;
+
+			// --- now build it back up --- //
+
+			all_clusters[this_cluster_str] = this_cluster;
+
+			clusters_this_level[curr_curve] 			   = this_cluster_str;
+			clusters_this_level[closest_other_inner_curve] = this_cluster_str;
+
+			hierarchical_cluster[curr_cluster_depth] = clusters_this_level;
 		};
 
 	};
