@@ -5,6 +5,14 @@
 
 	var set_random_seed = function(given_seed) {
 
+		/*
+			If your process needs a repeatable sequence of random values, then execute
+			this ONCE at top of your process.  Subsequent calls to below get_random_* functions
+			will then return the same sequence of random values across process executional runs.
+			IMPORTANT - if instead, you need a fresh random sequence across runs then avoid calling this.
+
+		*/
+
 		Math.seed = function(s) {
 		    return function() {
 		        s = Math.sin(s) * 10000; return s - Math.floor(s);

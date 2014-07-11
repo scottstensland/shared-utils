@@ -1,8 +1,14 @@
 
 var shared_utils = require('./shared_utils');
 var audio_utils = require('./audio_utils');
-var jdataview = require('jdataview');
+var hierarchical_cluster = require('./hierarchical_cluster');
+
+
+// var jdataview = require('jdataview');
+
+
 var fs = require('fs');
+
 
 (function(exports) {
 
@@ -22,6 +28,12 @@ exports.convert_16_bit_unsigned_int_to_32_bit_float         = shared_utils.conve
 
 exports.convert_16_bit_signed_int_to_32_bit_float           = shared_utils.convert_16_bit_signed_int_to_32_bit_float;
 exports.convert_32_bit_float_into_signed_16_bit_int_lossy   = shared_utils.convert_32_bit_float_into_signed_16_bit_int_lossy;
+
+
+exports.gen_curves                  = hierarchical_cluster.gen_curves;
+exports.show_curves                 = hierarchical_cluster.show_curves;
+exports.do_clustering               = hierarchical_cluster.do_clustering;
+
 
 
 
@@ -272,13 +284,13 @@ exports.read_file_into_buffer = function(input_file_obj, property_buffer_raw_inp
 
         var newData;
 
-        console.log('inside READABLEEEEEEEEEE of read_file_into_buffer ');
+        // console.log('inside READABLEEEEEEEEEE of read_file_into_buffer ');
 
         while (null !== (newData = input_read_stream.read())) {
 
             // if (curr_print_count < max_print_count) {
 
-            console.log('CCCCCC binary newData length this callback cycle is ', newData.length);
+            // console.log('CCCCCC binary newData length this callback cycle is ', newData.length);
             // }
 
             // size_limit_buffer = (newData.length < limit_size_input_file_buffer) ?
@@ -297,8 +309,8 @@ exports.read_file_into_buffer = function(input_file_obj, property_buffer_raw_inp
 
             // if (curr_print_count < max_print_count) {
 
-            console.log('binary input_file_obj.raw_buffer length post concat  ', 
-                            input_file_obj[property_buffer_raw_input_file].length);
+            // console.log('binary input_file_obj.raw_buffer length post concat  ', 
+            //                 input_file_obj[property_buffer_raw_input_file].length);
             // }
             // curr_print_count++;
         }
