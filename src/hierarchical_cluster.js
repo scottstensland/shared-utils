@@ -27,11 +27,12 @@
 	var curve_pairs_already_calculated = {}; // during distance calc record pairings of curve A and curve B
 											 // to avoid redundant calc of same pair when visiting B once A has happened
 
-	var hierarchical_cluster = []; // bottom up tree start from each curve number, branching up through cluster layers
+	var hierarchical_cluster = {}; // bottom up tree start from each curve number, branching up through cluster layers
 	var curr_cluster_depth = 0;
 	var centroid = "centroid";
 
-	var all_clusters = {};
+	var all_clusters = [];
+	var curr_num_cluster = 0;
 
 	// ---
 
@@ -182,6 +183,8 @@
 
 		for (var curr_curve = 0; curr_curve < max_num_curves; curr_curve++) {
 
+			console.log("\n      ", curr_curve, " <><><>   <><><>   <><><>   curr_curve <><><>   <><><>   <><><>\n");
+
 			var curr_curve_samples = all_curves[curr_curve];
 
 			var min_distance = 99999.99;
@@ -224,6 +227,76 @@
 
 			// --- burrow down to find or create cluster to put current pair of curves --- //
 
+			var curr_own_key   = curr_cluster_depth + ":" + curr_curve;
+			var curr_other_key = curr_cluster_depth + ":" + closest_other_inner_curve;
+
+			console.log("curr_own_key ", curr_own_key);
+			console.log("curr_other_key ", curr_other_key);
+
+
+			var curr_active_num_cluster;
+			var curr_active_cluster;
+
+			// we know current curve is NOT yet in a cluster ... BUT we do NOT know if other curve is or not
+
+			if (hierarchical_cluster.hasOwnProperty(curr_other_key)) {
+
+				console.log("OOOKKKKKK found curr_other_key in hierarchical_cluster");
+
+				curr_active_num_cluster = hierarchical_cluster[curr_other_key];
+
+				curr_active_cluster = all_clusters[curr_active_num_cluster];
+
+				console.log("OK found curr_other_key ", curr_other_key, 
+							" as key of hierarchical_cluster ", hierarchical_cluster);
+
+				console.log("curr_active_num_cluster ", curr_active_num_cluster);
+				console.log("curr_active_cluster ", curr_active_cluster);
+
+				// -----
+
+
+				curr_active_cluster[curr_curve] = curr_curve;
+
+				all_clusters[curr_active_num_cluster] = curr_active_cluster;
+
+				hierarchical_cluster[curr_own_key]   = curr_active_num_cluster;
+
+			} else {
+
+			// if (typeof curr_active_cluster === "undefined") { // neither curve is in a cluster for this cluster depth
+
+				console.log("seeing curr_active_cluster undefined ... so create new curr_active_cluster");
+				console.log("curr_num_cluster ", curr_num_cluster);
+				console.log("curr_num_cluster ", curr_num_cluster);
+				console.log("curr_num_cluster ", curr_num_cluster);
+				console.log("curr_num_cluster ", curr_num_cluster);
+
+				// curr_active_cluster = {
+
+				// 	curr_curve : curr_curve,
+				// 	closest_other_inner_curve : closest_other_inner_curve
+				// };
+
+				curr_active_cluster = {};
+
+				curr_active_cluster[curr_curve] = curr_curve;
+				curr_active_cluster[closest_other_inner_curve] = closest_other_inner_curve;
+				
+				console.log("curr_active_cluster ", curr_active_cluster);
+
+				all_clusters[curr_num_cluster] = curr_active_cluster;
+
+				hierarchical_cluster[curr_own_key]   = curr_num_cluster;
+				hierarchical_cluster[curr_other_key] = curr_num_cluster;
+
+				curr_num_cluster++;
+			};
+
+
+			// --------------- ignore below ---------------- //
+
+			/*
 			var clusters_this_level = {};
 
 			if (hierarchical_cluster.hasOwnProperty(curr_cluster_depth)) {
@@ -236,6 +309,9 @@
 			if (clusters_this_level.hasOwnProperty(closest_other_inner_curve)) {
 
 				this_cluster_str = clusters_this_level[closest_other_inner_curve];
+
+				console.log(".......... just retrieved this_cluster_str ", this_cluster_str, 
+							" from clusters_this_level ", closest_other_inner_curve);
 			};
 
 			if (typeof this_cluster_str === "undefined") {
@@ -268,7 +344,13 @@
 			clusters_this_level[closest_other_inner_curve] = this_cluster_str;
 
 			hierarchical_cluster[curr_cluster_depth] = clusters_this_level;
+			*/
+
+			console.log("\n\n--------- hierarchical_cluster ", hierarchical_cluster);
+			console.log("\n\n--------- all_clusters ", all_clusters);
 		};
+	
+		curr_cluster_depth++;
 
 	};
 	exports.do_clustering = do_clustering;
