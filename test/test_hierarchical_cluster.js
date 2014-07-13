@@ -81,8 +81,8 @@ var setup_two = {
 
 
 
-// shared_utils.gen_curves(setup_one);
-shared_utils.gen_curves(setup_two);
+shared_utils.gen_curves(setup_one);
+// shared_utils.gen_curves(setup_two);
 
 
 // shared_utils.show_curves();
