@@ -21,6 +21,9 @@ exports.get_random_in_range_inclusive_int               = shared_utils.get_rando
 exports.set_random_seed                                 = shared_utils.set_random_seed;
 exports.diff_buffers                                    = shared_utils.diff_buffers;
 exports.show_object                                     = shared_utils.show_object;
+exports.release_all_prop_from_object                    = shared_utils.release_all_prop_from_object;
+
+
 
 exports.convert_32_bit_float_into_unsigned_16_bit_int_lossy = shared_utils.convert_32_bit_float_into_unsigned_16_bit_int_lossy;
 exports.convert_16_bit_unsigned_int_to_32_bit_float         = shared_utils.convert_16_bit_unsigned_int_to_32_bit_float;

@@ -69,7 +69,7 @@
 
 	// ---
 
-	var show_curves = function() {
+	var show_curves = function(given_cluster_depth) {
 
 		if (! flag_are_curves_populated) {
 
@@ -77,23 +77,29 @@
 			process.exit(8);
 		}
 
+		if (typeof given_cluster_depth == "undefined") {
+
+			given_cluster_depth = 0; // show bottom level if not chosen
+		}
+
 		console.log("\n_____________ show_curves  with ", 
 					max_num_curves, " curves, ", max_samples, " samples per curve\n");
 
 		for (var curr_curve = 0; curr_curve < max_num_curves; curr_curve++) {
 
-			var curr_cluster_key = curr_cluster_depth + ":" + curr_curve;
+			// var curr_cluster_key = curr_cluster_depth + ":" + curr_curve;
 
-			var curr_curve_samples = all_curves[curr_cluster_key];
+			// var curr_curve_samples = all_curves[curr_cluster_key];
+			var curr_curve_samples = all_curves[given_cluster_depth][curr_curve];
 
 			for (var curr_sample = 0; curr_sample < max_samples; curr_sample++) {
 
 				var curr_value = curr_curve_samples[curr_sample];
 
-				console.log(curr_curve, curr_sample, curr_value);
+				console.log(given_cluster_depth, curr_curve, curr_sample, curr_value);
 			};
 
-			all_curves[curr_cluster_key] = curr_curve_samples;
+			// all_curves[curr_cluster_key] = curr_curve_samples;
 		};
 	};
 	exports.show_curves = show_curves;
@@ -128,9 +134,11 @@
 
 		set_flavor_random_curves(flavor_random);	// set relevant methods based on chosen data type
 
+		all_curves[curr_cluster_depth] = {}; // record placeholder object for current cluster depth counter
+
 		for (var curr_curve = 0; curr_curve < max_num_curves; curr_curve++) {
 
-			var curr_cluster_key = curr_cluster_depth + ":" + curr_curve;
+			// var curr_cluster_key = curr_cluster_depth + ":" + curr_curve;
 
 			var curr_curve_samples = new flavor_typed_array(max_samples);
 
@@ -141,7 +149,8 @@
 				print_output(curr_curve, curr_sample, curr_curve_samples[curr_sample]);				
 			};
 
-			all_curves[curr_cluster_key] = curr_curve_samples;
+			// all_curves[curr_cluster_key] = curr_curve_samples;
+			all_curves[curr_cluster_depth][curr_curve] = curr_curve_samples;
 		};
 		flag_are_curves_populated = true;
 	};
@@ -183,6 +192,18 @@
 											  (right_number + ":" + left_number);
 	};
 
+	// ---
+
+	var add_curve_to_cluster = function(target_cluster,  source_curve, given_max_samples) {
+
+		for (var index = 0; index < given_max_samples; index++) {
+
+			target_cluster[index] += source_curve[index];
+		};
+	};
+
+	// ---
+
 	var do_clustering = function() {		//		hierarchical agglomerative clustering
 
 		console.log("_________ do_clustering _____________");
@@ -191,19 +212,30 @@
 
 		console.log(all_curves);
 
-		var curr_cluster_this_depth_level = 0;
+		// return;
+
+		shared_utils.release_all_prop_from_object(curve_pairs_already_calculated);
+
+		hierarchical_cluster[curr_cluster_depth] = {};
+
+		var next_cluster_depth = curr_cluster_depth + 1;
+
+		all_curves[next_cluster_depth] = {}; // seed with empty object property as place holder
 
 		for (var curr_curve = 0; curr_curve < max_num_curves; curr_curve++) {
 
 			console.log("\n      ", curr_curve, " <><><>   <><><>   <><><>   curr_curve <><><>   <><><>   <><><>\n");
 
-			var curr_cluster_key = curr_cluster_depth + ":" + curr_curve;
+			// var curr_cluster_key = curr_cluster_depth + ":" + curr_curve;
 
-			var curr_curve_samples = all_curves[curr_cluster_key];
+			// var curr_curve_samples = all_curves[curr_cluster_key];
+			var curr_curve_samples = all_curves[curr_cluster_depth][curr_curve];
 
 			var min_distance = 99999.99;
 			var closest_other_inner_curve;
 			var curr_distance;
+
+			// var curr_other_cluster_key;
 
 			for (var curr_inner_curve = 0; curr_inner_curve < max_num_curves; curr_inner_curve++) {
 
@@ -219,9 +251,10 @@
 
 				} else {
 
-					var curr_other_cluster_key = curr_cluster_depth + ":" + curr_inner_curve;
+					// var curr_other_cluster_key = curr_cluster_depth + ":" + curr_inner_curve;
 
-					curr_distance = calc_distance(curr_curve_samples, all_curves[curr_other_cluster_key]);
+					// curr_distance = calc_distance(curr_curve_samples, all_curves[curr_other_cluster_key]);
+					curr_distance = calc_distance(curr_curve_samples, all_curves[curr_cluster_depth][curr_inner_curve]);
 
 					curve_pairs_already_calculated[combo_key] = curr_distance;
 				}
@@ -239,39 +272,62 @@
 
 			// --- burrow down to find or create cluster to put current pair of curves --- //
 
-			var curr_own_key   = curr_cluster_depth + ":" + curr_curve;
-			var curr_other_key = curr_cluster_depth + ":" + closest_other_inner_curve;
 
-			console.log("curr_own_key ", curr_own_key);
-			console.log("curr_other_key ", curr_other_key);
+			console.log("TTOP all_clusters ", all_clusters);
+			console.log("TTOP hierarchical_cluster ", hierarchical_cluster);
 
+
+			// ---
+
+			// var curr_own_key   = curr_cluster_depth + ":" + curr_curve;
+			// var curr_other_key = curr_cluster_depth + ":" + closest_other_inner_curve;
+
+			// console.log("curr_own_key ", curr_own_key);
+			// console.log("curr_other_key ", curr_other_key);
 
 			var curr_active_num_cluster;
 			var curr_active_cluster;
 
 			// we know current curve is NOT yet in a cluster ... BUT we do NOT know if other curve is or not
 
-			if (hierarchical_cluster.hasOwnProperty(curr_other_key)) {
+			// if (hierarchical_cluster.hasOwnProperty(curr_other_key)) {
+			if (hierarchical_cluster[curr_cluster_depth].hasOwnProperty(closest_other_inner_curve)) {
 
-				console.log("OOOKKKKKK found curr_other_key in hierarchical_cluster");
+				console.log("OOOKKKKKK found closest_other_inner_curve in hierarchical_cluster");
 
-				curr_active_num_cluster = hierarchical_cluster[curr_other_key];
+				// curr_active_num_cluster = hierarchical_cluster[curr_other_key];
+				curr_active_num_cluster = hierarchical_cluster[curr_cluster_depth][closest_other_inner_curve];
 
 				curr_active_cluster = all_clusters[curr_active_num_cluster];
 
-				console.log("OK found curr_other_key ", curr_other_key, 
+				console.log("OK found curr_cluster_depth ", curr_cluster_depth, 
+							" closest_other_inner_curve ", closest_other_inner_curve,
 							" as key of hierarchical_cluster ", hierarchical_cluster);
 
-				// console.log("curr_active_num_cluster ", curr_active_num_cluster);
-				// console.log("curr_active_cluster ", curr_active_cluster);
+				console.log("curr_active_num_cluster ", curr_active_num_cluster);
+				console.log("curr_active_cluster ", curr_active_cluster);
 
 				// -----
 
-				curr_active_cluster[curr_curve] = curr_curve;
+				if (hierarchical_cluster[curr_cluster_depth].hasOwnProperty(curr_curve)) {
 
-				hierarchical_cluster[curr_own_key]   = curr_active_num_cluster;
+					console.log("OK skip over as its already added from ", curr_cluster_depth, curr_curve,
+								" into cluster ", next_cluster_depth, curr_active_num_cluster);
+				} else {
 
-			} else {
+					curr_active_cluster[curr_curve] = curr_curve; // add current curve to existing cluster
+
+					hierarchical_cluster[curr_cluster_depth][curr_curve]   = curr_active_num_cluster;
+
+					console.log("AAAA about to add from ", curr_cluster_depth, curr_curve,
+								" into cluster ", next_cluster_depth, curr_active_num_cluster);
+
+					add_curve_to_cluster(all_curves[next_cluster_depth][curr_active_num_cluster], 
+										 all_curves[curr_cluster_depth][curr_curve],
+										 max_samples);					
+				}
+
+			} else {	// add both curves of current pair into cluster as it has not seen this pair yet
 
 				curr_active_cluster = {};
 
@@ -282,25 +338,55 @@
 
 				all_clusters[curr_num_cluster] = curr_active_cluster;
 
-				hierarchical_cluster[curr_own_key]   = curr_num_cluster;
-				hierarchical_cluster[curr_other_key] = curr_num_cluster;
+				// hierarchical_cluster[curr_own_key]   = curr_num_cluster;
+				// hierarchical_cluster[curr_other_key] = curr_num_cluster;
 
-				// ---
+				hierarchical_cluster[curr_cluster_depth][curr_curve]				= curr_num_cluster;
+				hierarchical_cluster[curr_cluster_depth][closest_other_inner_curve]	= curr_num_cluster;
 
-				var centroid_key = (curr_cluster_depth + 1) + ":" + curr_num_cluster;
+				// --- now build up curves for next clustering depth layer just as we did for initial clustering
 
-				all_curves[centroid_key] = 
+				// allocate new curve to store this new cluster centroid
 
+				all_curves[next_cluster_depth][curr_num_cluster] = new flavor_typed_array(max_samples);
+
+				// add into this new curve both curves of current pair of curves
+
+				console.log("BBBBB about to add from ", curr_cluster_depth, curr_curve,
+							" into cluster ", next_cluster_depth, curr_num_cluster);
+
+				add_curve_to_cluster(all_curves[next_cluster_depth][curr_num_cluster], 
+									 all_curves[curr_cluster_depth][curr_curve],
+									 max_samples);
+
+
+				console.log("CCCCCC about to add from ", curr_cluster_depth, closest_other_inner_curve,
+								" into cluster ", next_cluster_depth, curr_num_cluster);
+
+				add_curve_to_cluster(all_curves[next_cluster_depth][curr_num_cluster], 
+									 all_curves[curr_cluster_depth][closest_other_inner_curve],
+									 max_samples);
 				// ---
 
 				curr_num_cluster++;
 			};
 
-			console.log("\n\n--------- hierarchical_cluster ", hierarchical_cluster);
-			console.log("\n\n--------- all_clusters ", all_clusters);
+			console.log("BBBOT --------- hierarchical_cluster ", hierarchical_cluster);
+			console.log("BBBOT --------- all_clusters ", all_clusters);
 		};
 	
 		curr_cluster_depth++;
+
+		// ---
+
+		console.log("\n\n--------- all_curves ", all_curves);
+
+		// ---
+
+		var keys_all_curves = Object.keys(all_curves);
+		
+		console.log("\n\n--------- keys_all_curves ", keys_all_curves);
+
 
 	};
 	exports.do_clustering = do_clustering;

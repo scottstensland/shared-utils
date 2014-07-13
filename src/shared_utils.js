@@ -51,6 +51,17 @@
 
 	// ---
 
+	var release_all_prop_from_object = function (given_object) {    // purge memory for object reuse
+
+		for (var curr_property in given_object)
+		{
+			if (given_object.hasOwnProperty(curr_property))
+				delete given_object[curr_property];
+		}
+	};
+	exports.release_all_prop_from_object = release_all_prop_from_object;
+
+
 	var convert_32_bit_float_into_unsigned_16_bit_int_lossy = function(input_32_bit_buffer) {
 
 		// this method is LOSSY - intended as preliminary step when saving audio into WAV format files
