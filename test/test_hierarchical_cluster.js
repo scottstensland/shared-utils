@@ -65,23 +65,39 @@ var setup_one = {
 };
 
 
+var setup_one_N_half = {
+
+    // max_num_curves : 5000,     // number of curves
+    max_num_curves : 17,     // number of curves
+    // max_samples : 1000,       // number of data points per curve 
+    max_samples : 3,       // number of data points per curve 
+    min_value : -5, 
+    max_value : 5,
+    // flavor_random : "integer",
+    flavor_random : "float",
+    flag_print : true,
+    // flag_print : false,
+};
+
+
 var setup_two = {
 
     // max_num_curves : 5000,     // number of curves
     max_num_curves : 500,     // number of curves
     // max_samples : 1000,       // number of data points per curve 
-    max_samples : 100,       // number of data points per curve 
+    max_samples : 100000,       // number of data points per curve 
     min_value : -1.0, 
     max_value : 1.0,
     // flavor_random : "integer",
     flavor_random : "float",
     // flag_print : true,
-    // flag_print : false,
+    flag_print : false,
 };
 
 
 
-shared_utils.gen_curves(setup_one);
+// shared_utils.gen_curves(setup_one);
+shared_utils.gen_curves(setup_one_N_half);
 // shared_utils.gen_curves(setup_two);
 
 
