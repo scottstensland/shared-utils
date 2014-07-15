@@ -683,9 +683,11 @@ var write_json_to_file = function(output_filename, given_json, given_options) {
 
     var options = given_options || 'utf8';
 
+    var json_as_string = JSON.stringify(given_json); // convert json into string
+
     try {
 
-        fs.writeFileSync(output_filename, given_json, options); // or async : writeFile
+        fs.writeFileSync(output_filename, json_as_string, options); // or async : writeFile
 
     } catch (err) {
 
@@ -696,6 +698,32 @@ var write_json_to_file = function(output_filename, given_json, given_options) {
     console.log("just wrote to output file ", output_filename);
 };
 exports.write_json_to_file = write_json_to_file;
+
+// ---
+
+
+var read_file_retrieve_json = function(input_filename, given_options) {
+
+    var options = given_options || 'utf8';
+
+    var json_back_to_caller;
+
+    try {
+
+        json_back_to_caller = JSON.parse(fs.readFileSync(input_filename, given_options));
+
+    } catch (err) {
+
+            console.log(err);
+            process.exit(8);
+    };
+
+    console.log("just read from input file ", input_filename);
+
+    return json_back_to_caller;
+};
+exports.read_file_retrieve_json = read_file_retrieve_json;
+
 
 
 // ---
