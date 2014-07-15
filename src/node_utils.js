@@ -1,7 +1,7 @@
 
 var shared_utils = require('./shared_utils');
 var audio_utils = require('./audio_utils');
-var hierarchical_cluster = require('./hierarchical_cluster');
+// var hierarchical_cluster = require('./hierarchical_cluster');
 
 
 // var jdataview = require('jdataview');
@@ -24,20 +24,12 @@ exports.show_object                                     = shared_utils.show_obje
 exports.release_all_prop_from_object                    = shared_utils.release_all_prop_from_object;
 
 
-
 exports.convert_32_bit_float_into_unsigned_16_bit_int_lossy = shared_utils.convert_32_bit_float_into_unsigned_16_bit_int_lossy;
 exports.convert_16_bit_unsigned_int_to_32_bit_float         = shared_utils.convert_16_bit_unsigned_int_to_32_bit_float;
 
 
 exports.convert_16_bit_signed_int_to_32_bit_float           = shared_utils.convert_16_bit_signed_int_to_32_bit_float;
 exports.convert_32_bit_float_into_signed_16_bit_int_lossy   = shared_utils.convert_32_bit_float_into_signed_16_bit_int_lossy;
-
-
-exports.gen_curves                  = hierarchical_cluster.gen_curves;
-exports.show_curves                 = hierarchical_cluster.show_curves;
-exports.do_clustering               = hierarchical_cluster.do_clustering;
-
-
 
 
 exports.pop_audio_buffer                                = audio_utils.pop_audio_buffer;
@@ -684,6 +676,27 @@ exports.interleave = function(leftChannel, rightChannel) {
   }
   return result;
 };
+
+// ---
+
+var write_json_to_file = function(output_filename, given_json, given_options) {
+
+    var options = given_options || 'utf8';
+
+    try {
+
+        fs.writeFileSync(output_filename, given_json, options); // or async : writeFile
+
+    } catch (err) {
+
+            console.log(err);
+            process.exit(8);
+    };
+
+    console.log("just wrote to output file ", output_filename);
+};
+exports.write_json_to_file = write_json_to_file;
+
 
 // ---
 /*
