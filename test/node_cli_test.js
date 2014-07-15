@@ -103,7 +103,7 @@ var samples_per_cycle = 4;
 
 var source_obj = {};
 
-// var source_obj = audio_utils.pop_audio_buffer(SIZE_BUFFER_SOURCE, samples_per_cycle);
+var source_obj = audio_utils.pop_audio_buffer(SIZE_BUFFER_SOURCE, samples_per_cycle);
 
 // var max_index = 3;
 // var max_index = SIZE_BUFFER_SOURCE;
