@@ -90,7 +90,7 @@ exports.copy_properties_across_objects = copy_properties_across_objects;
 
 // ---
 
-exports.parse_wav = function(wav_input_file_obj, property_input_buffer, property_output_buffer) {
+var parse_wav = function(wav_input_file_obj, property_input_buffer, property_output_buffer) {
 
     // http://stackoverflow.com/questions/19991405/how-can-i-detect-whether-a-wav-file-has-a-44-or-46-byte-header?lq=1
 
@@ -260,7 +260,7 @@ exports.parse_wav = function(wav_input_file_obj, property_input_buffer, property
 
 // ---
 
-exports.read_file_into_buffer = function(input_file_obj, property_buffer_raw_input_file, property_buffer_input_file, cb_when_done) {
+var read_file_into_buffer = function(input_file_obj, property_buffer_raw_input_file, property_buffer_input_file, cb_when_done) {
 
 // bbb
 
@@ -339,6 +339,7 @@ exports.read_file_into_buffer = function(input_file_obj, property_buffer_raw_inp
     });
 
 };       //      read_file_into_buffer
+// this is NOT for export for INTERNAL usage ONLY
 // exports.read_file_into_buffer = read_file_into_buffer;
 
 // ---
@@ -607,7 +608,6 @@ var write_wav = function(wav_file_obj) {
 
     write_stream.end();
 */
-// bbb
 
     //prepare the length of the buffer to 4 bytes per float
     // var buffer = new Buffer(data.length*4);
@@ -1058,10 +1058,104 @@ var normalize_buffer = function(audio_obj, spec) {
 exports.normalize_buffer = normalize_buffer;
 
 // ---
+/*
+function cb_parse_buffer_as_wav_format(input_obj, property_buffer_raw_input_file, property_buffer_input_file) {
 
-exports.write_32_bit_buffer_to_wav_file = function(audio_obj, wav_output_filename, spec) {
+    console.log("TOP TOP TOP cb_parse_buffer_as_wav_format");
 
-    console.log("TTT ___ write_32_bit_buffer_to_wav_file ___ ");
+    // sync NOT async ... output into buffer_input_file
+    // shared_utils.parse_wav(input_obj, property_buffer_raw_input_file, property_buffer_input_file);
+    parse_wav(input_obj, property_buffer_raw_input_file, property_buffer_input_file);
+
+    delete input_obj[property_buffer_raw_input_file];    // no longer need raw pre parse buffer
+
+    console.log("buffer size ", input_obj[property_buffer_input_file].length);
+    console.log("buffer size ", input_obj[property_buffer_input_file].length);
+    console.log("buffer size ", input_obj[property_buffer_input_file].length);
+
+    // var show_object = function (given_obj, given_label, given_mode, limit_size_buffer)
+
+    shared_utils.show_object(input_obj, " POST after reading file ", "total", 10);
+
+    var read_audio_obj = {};
+
+    // read_audio_obj.buffer = shared_utils.convert_16_bit_unsigned_int_to_32_bit_float(input_obj[property_buffer_input_file]);
+    read_audio_obj.buffer = shared_utils.convert_16_bit_signed_int_to_32_bit_float(input_obj[property_buffer_input_file]);
+
+
+    shared_utils.show_object(read_audio_obj, " WedWedWed read_audio_obj 32 bit floating point ", "total", 10);
+
+
+    // var buff_size_from_file = input_obj[property_buffer_input_file].length;
+    // var size_buffer = 256;
+
+};      //      cb_parse_buffer_as_wav_format
+*/
+// ---
+
+function cb_parse_buffer_as_wav_format(input_obj, property_buffer_raw_input_file, property_buffer_input_file) {
+
+    console.log("TOP TOP TOP cb_parse_buffer_as_wav_format");
+
+    // sync NOT async ... output into buffer_input_file
+    // shared_utils.parse_wav(input_obj, property_buffer_raw_input_file, property_buffer_input_file);
+    parse_wav(input_obj, property_buffer_raw_input_file, property_buffer_input_file);
+
+    delete input_obj[property_buffer_raw_input_file];    // no longer need raw pre parse buffer
+
+    console.log("buffer size ", input_obj[property_buffer_input_file].length);
+    console.log("buffer size ", input_obj[property_buffer_input_file].length);
+    console.log("buffer size ", input_obj[property_buffer_input_file].length);
+
+    // var show_object = function (given_obj, given_label, given_mode, limit_size_buffer)
+
+    shared_utils.show_object(input_obj, " POST after reading file ", "total", 10);
+
+    // var read_audio_obj = {};
+
+    // read_audio_obj.buffer = shared_utils.convert_16_bit_unsigned_int_to_32_bit_float(input_obj[property_buffer_input_file]);
+    // read_audio_obj.buffer = shared_utils.convert_16_bit_signed_int_to_32_bit_float(input_obj[property_buffer_input_file]);
+    input_obj.buffer = shared_utils.convert_16_bit_signed_int_to_32_bit_float(input_obj[property_buffer_input_file]);
+
+
+    shared_utils.show_object(input_obj, " WedWedWed input_obj 32 bit floating point ", "total", 10);
+
+
+    // var buff_size_from_file = input_obj[property_buffer_input_file].length;
+    // var size_buffer = 256;
+
+};      //      cb_parse_buffer_as_wav_format
+
+// ---
+
+exports.read_16_bit_wav_file_into_32_bit_float_buffer = function(read_wav_file_obj, wav_input_filename, spec) {
+
+    console.log("TTT ___ read_16_bit_wav_file_into_32_bit_float_buffer ___ ");
+
+    // var read_wav_file_obj = {};  // create stub object to which we attach .buffer
+
+    var property_buffer_raw_input_file = "buffer_raw_input_file";
+    var property_buffer_input_file     = "buffer_input_file";
+
+    read_wav_file_obj.filename = wav_input_filename;
+
+
+    read_wav_file_obj[property_buffer_raw_input_file] = new Buffer(0);
+
+// bbb
+
+    read_file_into_buffer(read_wav_file_obj, property_buffer_raw_input_file,
+                                    property_buffer_input_file,
+                                    cb_parse_buffer_as_wav_format);
+
+};      //      read_16_bit_wav_file_into_32_bit_float_buffer
+
+
+// ---
+
+exports.write_32_bit_float_buffer_to_16_bit_wav_file = function(audio_obj, wav_output_filename, spec) {
+
+    console.log("TTT ___ write_32_bit_float_buffer_to_16_bit_wav_file ___ ");
 
     var property_buffer = "buffer";   // defaults
     var allowed_minimum = -1.0;       // defaults
@@ -1151,11 +1245,11 @@ exports.write_32_bit_buffer_to_wav_file = function(audio_obj, wav_output_filenam
 
     
     shared_utils.show_object(audio_obj, "total",
-            "corindddeeee audio_obj corindddeeee", 10);
+            "hhhhhhhhhhhhhhh corindddeeee audio_obj corindddeeee", 10);
 
 
     // output_16_bit_audio_obj.buffer = shared_utils.convert_32_bit_float_into_unsigned_16_bit_int_lossy(audio_obj[property_buffer]);
-    // output_16_bit_audio_obj.buffer = shared_utils.convert_32_bit_float_into_signed_16_bit_int_lossy(audio_obj[property_buffer]);
+    output_16_bit_audio_obj.buffer = shared_utils.convert_32_bit_float_into_signed_16_bit_int_lossy(audio_obj[property_buffer]);
 
 // bbb
 
@@ -1186,9 +1280,9 @@ exports.write_32_bit_buffer_to_wav_file = function(audio_obj, wav_output_filenam
 
 */
 
-    console.log("BBB ___ write_32_bit_buffer_to_wav_file ___ ");
+    console.log("BBB ___ write_32_bit_float_buffer_to_16_bit_wav_file ___ ");
 
-};      //      write_32_bit_buffer_to_wav_file
+};      //      write_32_bit_float_buffer_to_16_bit_wav_file
 
 // ---
 
