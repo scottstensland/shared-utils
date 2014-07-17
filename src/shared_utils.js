@@ -430,6 +430,8 @@
 		console.log("TOP of diff_entire_buffers");
 
 		var total_diffs = 0;
+		var total_raw_left = 0;
+		var total_raw_right = 0;
 
 		var left_buffer = left_obj.buffer;
 		var right_buffer = right_obj.buffer;
@@ -437,11 +439,17 @@
 		for (var index = 0; index < size_buffer; index++) {
 
 			total_diffs += Math.abs(left_buffer[index] - right_buffer[index]);
+
+			total_raw_left  += Math.abs(left_buffer[index]);
+			total_raw_right += Math.abs(right_buffer[index]);
 		};
 
 		console.log("total_diffs ", total_diffs);
 
 		given_spec.total_diffs = total_diffs;
+
+		given_spec.total_raw_left  = total_raw_left;
+		given_spec.total_raw_right = total_raw_right;
 	};
 
 	// ---
