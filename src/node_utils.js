@@ -315,6 +315,7 @@ var read_file_into_buffer = function(input_file_obj, property_buffer_raw_input_f
     input_read_stream.on("error", function (error) {
 
         console.log("ERROR - failure when attempting to read ", input_file_obj.filename, error);
+        process.exit(8);
     });
 
 
@@ -434,6 +435,7 @@ var write_wav = function(wav_file_obj) {
     // console.log("FFFFFFFF bit_depth    ", bit_depth);
     // console.log("FFFFFFFF num_channels ", num_channels);
     console.log("FFFFFFFF data_length ", data_length);
+    console.log("FFFFFFFF filename ", path);
 
 
 
@@ -474,6 +476,23 @@ var write_wav = function(wav_file_obj) {
         // process.exit(8);
         return;
     });
+
+    // ---
+
+
+    write_stream.on('finish', function() {
+
+      console.error('all writes are now complete.');
+      console.error('all writes are now complete.');
+      console.error('all writes are now complete.');
+      console.error('all writes are now complete.');
+      console.error('all writes are now complete.');
+      console.error('all writes are now complete.');
+      console.error('all writes are now complete.');
+      
+    });
+
+
 
     // ---
 
@@ -624,6 +643,8 @@ var write_wav = function(wav_file_obj) {
 
 
     write_stream.write(buffer_to_file);
+
+    // write_stream.flush();
 
 
     /*
@@ -1171,7 +1192,7 @@ exports.read_16_bit_wav_file_into_32_bit_float_buffer = function(read_wav_file_o
 
 // ---
 
-exports.write_32_bit_float_buffer_to_16_bit_wav_file = function(audio_obj, wav_output_filename, spec) {
+exports.write_32_bit_float_buffer_to_16_bit_wav_file = function(audio_obj, wav_output_filename, spec, db_done) {
 
     console.log("TTT ___ write_32_bit_float_buffer_to_16_bit_wav_file ___ ");
 
