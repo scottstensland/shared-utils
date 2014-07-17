@@ -1208,7 +1208,6 @@ exports.read_16_bit_wav_file_into_32_bit_float_buffer = function(read_wav_file_o
 
 };      //      read_16_bit_wav_file_into_32_bit_float_buffer
 
-
 // ---
 
 exports.write_32_bit_float_buffer_to_16_bit_wav_file = function(audio_obj, wav_output_filename, spec) {
@@ -1220,8 +1219,6 @@ exports.write_32_bit_float_buffer_to_16_bit_wav_file = function(audio_obj, wav_o
     var allowed_maximum = +1.0;       // defaults
 
     var really_big_number = 999999.9;
-
-    // var spec = spec || {};
 
     var spec = spec || { flag_normalize : false };
     // var spec = spec || { flag_normalize : true };
@@ -1254,89 +1251,13 @@ exports.write_32_bit_float_buffer_to_16_bit_wav_file = function(audio_obj, wav_o
     copy_properties_across_objects(audio_obj, output_16_bit_audio_obj);
 
     output_16_bit_audio_obj.filename = wav_output_filename;
-
-/*
-    // convert_8_bit_ints_into_16_bit_ints(audio_obj, output_16_bit_audio_obj);
-
-    // shared_utils.show_object(audio_obj, "total",
-    //         "SRSRSRSRSRSR this_connection STSTSTSTST", 10);
-
-    // Int16Array
-
-    // output_16_bit_audio_obj.buffer = new Int16Array(audio_obj.buffer); // stens TODO this does not seem to work
-
-
-    // output_16_bit_audio_obj.buffer = new Buffer(audio_obj.buffer.length);// input buffer is 32 bit we want 16 bit so half it
-    // output_16_bit_audio_obj.buffer = new Buffer(~~(audio_obj.buffer.length * 2));// input buffer is 32 bit we want 16 bit so half it
-    output_16_bit_audio_obj.buffer = new Buffer(0);// input buffer is 32 bit we want 16 bit so half it
-
-
-	// convert_8_bit_buffer_from_32_bit_float_to_16_bit_int(audio_obj, output_16_bit_audio_obj);
-    // convert_32_bit_floats_into_16_bit_ints(audio_obj, output_16_bit_audio_obj);
-
-    var some_blob_obj = {};
-
-    some_blob_obj.buffer = shared_utils.convert_32_bit_float_into_unsigned_16_bit_int_lossy(audio_obj[property_buffer]);
-
-    output_16_bit_audio_obj.buffer = new Buffer(some_blob_obj.buffer);
-
-
-    // console.log("output_16_bit_audio_obj.buffer ", output_16_bit_audio_obj.buffer);
-
-
-    shared_utils.show_object(output_16_bit_audio_obj, "total",
-            "coccococo output_16_bit_audio_obj coccococo", 10);
-
-    // ---
-
-
-    // show_buffer(wav_file_obj.buffer, wav_file_obj.buffer.length, 100);
-
-    write_wav(output_16_bit_audio_obj);
-*/
-
-// audio_obj[property_buffer]
-    
-
-
-
-
     
     shared_utils.show_object(audio_obj, "total",
             "hhhhhhhhhhhhhhh corindddeeee audio_obj corindddeeee", 10);
 
-
-    // output_16_bit_audio_obj.buffer = shared_utils.convert_32_bit_float_into_unsigned_16_bit_int_lossy(audio_obj[property_buffer]);
     output_16_bit_audio_obj.buffer = shared_utils.convert_32_bit_float_into_signed_16_bit_int_lossy(audio_obj[property_buffer]);
 
-// bbb
-
-
-
-
-
-    // shared_utils.show_object(output_16_bit_audio_obj, "total",
-    //         "weeeirrss  output_16_bit_audio_obj weeeirrss", 10);
-
-    // return;
-
     write_wav(output_16_bit_audio_obj);
-    // write_wav(audio_obj[property_buffer]);
-    // write_wav(audio_obj);
-
-/*
-    // ----------- REMOVE below it just displays reverse of above - takes 16 bit int back into 32 bit float 
-
-    var resuscitated_32_bit_obj = {};
-
-    resuscitated_32_bit_obj.buffer = shared_utils.convert_16_bit_unsigned_int_to_32_bit_float(output_16_bit_audio_obj.buffer);
-
-
-    
-    shared_utils.show_object(resuscitated_32_bit_obj, "total",
-            "CWcwCWcwcwcw resuscitated_32_bit_obj CWcwCWcwcwcw", 10);
-
-*/
 
     console.log("BBB ___ write_32_bit_float_buffer_to_16_bit_wav_file ___ ");
 

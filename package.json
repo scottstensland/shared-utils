@@ -1,6 +1,6 @@
 {
   "name": "shared-utils",
-  "version": "0.0.36",
+  "version": "0.0.37",
   "description": "contains useful utilities like various float to int conversions, 32 bit float to 16 bit int conversion, random number generator for ints or floats in min - max range inclusive",
   "main": "src/node_utils.js",
   "directories": {
