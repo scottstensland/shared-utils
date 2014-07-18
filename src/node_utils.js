@@ -489,7 +489,7 @@ var write_wav = function(wav_file_obj) {
       console.error('all writes are now complete.');
       console.error('all writes are now complete.');
       console.error('all writes are now complete.');
-      
+
     });
 
 
@@ -1155,10 +1155,6 @@ function cb_parse_buffer_as_wav_format(input_obj, property_buffer_raw_input_file
 
 
     cb_when_done(input_obj);  //  this is defined by original caller to hand back audio object with populated buffer
-
-
-    // var buff_size_from_file = input_obj[property_buffer_input_file].length;
-    // var size_buffer = 256;
 
 };      //      cb_parse_buffer_as_wav_format
 
