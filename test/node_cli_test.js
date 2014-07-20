@@ -26,7 +26,6 @@ function cb_after_reading_input_file_grow_curve(input_obj, property_buffer_raw_i
     console.log("buffer size ", input_obj[property_buffer_input_file].length);
     console.log("buffer size ", input_obj[property_buffer_input_file].length);
 
-
 	// var show_object = function (given_obj, given_label, given_mode, limit_size_buffer)
 
     shared_utils.show_object(input_obj, "input_obj", "total", 88);
@@ -112,6 +111,9 @@ for (var index = 0; index < source_obj.buffer.length; index++) {
 
     console.log(index, " source_obj ", source_obj.buffer[index]);
 }
+
+
+return;
 
 // --- take 32 bit float buffer ... convert into 16 bit integer array then back into 32 bit float buffer
 
