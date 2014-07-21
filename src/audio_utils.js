@@ -55,11 +55,10 @@ var pop_audio_buffer = function (size_buff, given_samples_per_cycle) {
 
         var index_buff = 0;
         var theta = 0.0;
+        
         do {
 
             audio_obj.buffer[running_index] = Math.sin(theta);
-
-            console.log("internal fresh ", audio_obj.buffer[running_index]);
 
             theta += incr_theta;
             running_index++;
