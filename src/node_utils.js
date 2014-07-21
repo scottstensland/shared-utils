@@ -70,6 +70,19 @@ var convert_16_bit_signed_ints_into_32_bit_floats = function(audio_buffer, size_
 };
 exports.convert_16_bit_signed_ints_into_32_bit_floats = convert_16_bit_signed_ints_into_32_bit_floats;
 
+// ---
+
+var toFixed = function(value, precision) {
+
+    var sign_or_padding = " ";
+    if (value < 0) sign_or_padding = "";
+
+    var power = Math.pow(10, precision || 0);
+
+    return sign_or_padding + String(Math.round(value * power) / power);
+};
+exports.toFixed = toFixed;
+
 
 var copy_properties_across_objects = function(input_obj, output_obj) {
 

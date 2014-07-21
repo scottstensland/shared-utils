@@ -36,6 +36,20 @@ function cb_after_reading_input_file_grow_curve(input_obj, property_buffer_raw_i
 
 // ------------------------------------------------------------------------------------ //
 
+
+var some_var = 2.07;
+
+console.log(shared_utils.toFixed(some_var, 5));
+
+var some_neg_var = -2.08;
+
+console.log(shared_utils.toFixed(some_neg_var, 5));
+
+// var toFixed = function(value, precision) {
+
+
+return;
+
 var that = {},
 	spec = spec || { name : "Corinde Wiers"};
 
