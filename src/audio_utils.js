@@ -9,7 +9,7 @@ var pop_audio_buffer = function (size_buff, given_samples_per_cycle) {
 
     value add of how this populates buffer with sinusoidal curve is the
     curve is assured to both start and stop at the zero cross over threshold,
-    independant of supplied input parms which control samples per cycle and buffer size.
+    independent of supplied input parms which control samples per cycle and buffer size.
     This avoids that "pop" which otherwise happens when rendering audio curve
     which begins at say 0.5 of a possible range -1 to 0 to +1
 
@@ -26,11 +26,16 @@ var pop_audio_buffer = function (size_buff, given_samples_per_cycle) {
         process.exit(1);
     }
 
+    /*
+
+    // stens TODO - verify if we leave this commented OUT the rendered sound has NO audible POP
+    
     if (0 != size_buff % samples_per_cycle) {
 
         console.log("ERROR - samples_per_cycle MUST be a divisor to SIZE_BUFFER_SOURCE");
         process.exit(2);
     }
+    */
 
     var count_num_cycles = size_buff / samples_per_cycle;
 
@@ -55,7 +60,7 @@ var pop_audio_buffer = function (size_buff, given_samples_per_cycle) {
 
         var index_buff = 0;
         var theta = 0.0;
-        
+
         do {
 
             audio_obj.buffer[running_index] = Math.sin(theta);
