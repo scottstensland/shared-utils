@@ -80,6 +80,22 @@ function cb_after_reading_input_file_grow_curve(input_obj, property_buffer_raw_i
 
 // ------------------------------------------------------------------------------------ //
 
+
+
+
+
+var some_var = 2.07;
+
+console.log(shared_utils.toFixed(some_var, 5));
+
+var some_neg_var = -2.08;
+
+console.log(shared_utils.toFixed(some_neg_var, 5));
+
+// return;
+
+
+
 /*
 var some_var = 2.07;
 
@@ -126,7 +142,7 @@ shared_utils.copy_properties_across_objects(source_obj, target_obj);
 console.log("here is source_obj ", source_obj);
 
 console.log("here is target_obj ", target_obj);
-*/
+
 
 // ------------  synthesize an audio buffer  ------------  //
 
