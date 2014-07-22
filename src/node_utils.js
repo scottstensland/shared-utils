@@ -1,6 +1,9 @@
 
+(function(exports) {
+
+
 var shared_utils = require('./shared_utils');
-var audio_utils = require('./audio_utils');
+// var audio_utils = require('./audio_utils');
 // var hierarchical_cluster = require('./hierarchical_cluster');
 
 
@@ -10,7 +13,6 @@ var audio_utils = require('./audio_utils');
 var fs = require('fs');
 
 
-(function(exports) {
 
     // from ~/Dropbox/Documents/code/js/audio/stream_buffers/stream_buffers/node_utils.js
     
@@ -32,7 +34,10 @@ exports.convert_16_bit_signed_int_to_32_bit_float           = shared_utils.conve
 exports.convert_32_bit_float_into_signed_16_bit_int_lossy   = shared_utils.convert_32_bit_float_into_signed_16_bit_int_lossy;
 
 
-exports.pop_audio_buffer                                = audio_utils.pop_audio_buffer;
+// exports.pop_audio_buffer                                = audio_utils.pop_audio_buffer;
+// exports.detect_fundamental_frequency                    = audio_utils.detect_fundamental_frequency;
+
+
 
 // ---
 
@@ -1164,9 +1169,7 @@ function cb_parse_buffer_as_wav_format(input_obj, property_buffer_raw_input_file
 
     delete input_obj[property_buffer_input_file];    // no longer need raw pre parse buffer
 
-
     shared_utils.show_object(input_obj, " WedWedWed input_obj 32 bit floating point ", "total", 10);
-
 
     cb_when_done(input_obj);  //  this is defined by original caller to hand back audio object with populated buffer
 

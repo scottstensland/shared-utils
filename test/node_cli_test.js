@@ -1,9 +1,53 @@
 #!/usr/bin/env node 
 
-var shared_utils = require("../src/node_utils");
-var audio_utils  = require("../src/audio_utils");
+// module.exports.do_clustering = function(environment_mode) { // functional inheritance Crockford 2008 pg 52
+
+var environment_mode = process.argv[2] || "dev";
+
+console.warn("running code in environment_mode: ", environment_mode);
+
+// ---
+
+var path = require('path');
+
+function resolvePath(str) {
+  if (str.substr(0, 2) === '~/') {
+    str = (process.env.HOME || process.env.HOMEPATH || process.env.HOMEDIR || process.cwd()) + str.substr(1);
+  }
+  return path.resolve(str);
+}
+
+// -------------------------------------------------------- //
+
+console.log("do_clustering  ....  environment_mode ", environment_mode);
+
+var that = {};
+var shared_utils;
+var audio_util_obj;
+var audio_utils;
+
+switch (environment_mode) {
+
+    case "nubia": // repository owner tinkering mode - ignore it 
+        shared_utils   = require(resolvePath("~/Dropbox/Documents/code/github/shared-utils/src/node_utils"));
+        audio_util_obj = require(resolvePath("~/Dropbox/Documents/code/github/audio-utils/src/audio_utils"));
+        break;
+
+    case "dev":
+        shared_utils   = require("shared-utils");    // get these modules from global install
+        audio_util_obj = require("audio-utils");    // get these modules from global install
+        break;
+
+    default :
+        shared_utils   = require("shared-utils");
+        audio_util_obj = require("audio-utils");    // get these modules from global install
+        break;
+};
+
+audio_utils = audio_util_obj.audio_utils(environment_mode);
 
 console.log("shared_utils ", shared_utils);
+console.log("audio_utils ", audio_utils);
 
 // ---
 
@@ -36,7 +80,7 @@ function cb_after_reading_input_file_grow_curve(input_obj, property_buffer_raw_i
 
 // ------------------------------------------------------------------------------------ //
 
-
+/*
 var some_var = 2.07;
 
 console.log(shared_utils.toFixed(some_var, 5));
@@ -75,20 +119,6 @@ var source_obj = {
 var target_obj = {};
 
 
-/*
-// var aaa = 0xFFFFFFFFF;
-var aaa = 0x00000FFFF; // 2^16 == 65535
-
-var bbb = 75535;
-
-var ccc = 75535 & 0x00000FFFF;
-
-console.log("ccc ", ccc);
-
-process.exit(8);
-*/
-
-
 // ---
 
 shared_utils.copy_properties_across_objects(source_obj, target_obj);
@@ -96,7 +126,7 @@ shared_utils.copy_properties_across_objects(source_obj, target_obj);
 console.log("here is source_obj ", source_obj);
 
 console.log("here is target_obj ", target_obj);
-
+*/
 
 // ------------  synthesize an audio buffer  ------------  //
 
@@ -127,7 +157,7 @@ for (var index = 0; index < source_obj.buffer.length; index++) {
 }
 
 
-return;
+// return;
 
 // --- take 32 bit float buffer ... convert into 16 bit integer array then back into 32 bit float buffer
 
@@ -143,7 +173,7 @@ for (var index = 0; index < output_16_bit_audio_obj.buffer.length; index++) {
 
 
 
-return;
+// return;
 
 
 /*
@@ -191,7 +221,9 @@ process.exit(8);
 // new_16_bit_array.set(source_obj.buffer);
 
 
-var new_16_bit_obj = {};
+// var new_16_bit_obj = {};
+
+/*
 
 // new_16_bit_obj.buffer = shared_utils.convert_32_bit_float_into_unsigned_16_bit_int(source_obj.buffer);
 
@@ -219,28 +251,32 @@ new_16_bit_obj.buffer = new_16_bit_array;
 
 // --------------------------------
 
+*/
 var new_32_bit_obj = {};
 
             // new_32_bit_array[index] = given_16_bit_buffer[index] / 32767 - 1.0;
 
 
-for (var index = 0; index < size_source_buffer; index++) {
+// for (var index = 0; index < size_source_buffer; index++) {
 
-    // console.log("new_16_bit_array ", index, new_16_bit_array[index], new_16_bit_array[index] / 32767 - 1.0);
-    console.log("new_16_bit_array ", index, new_16_bit_array[index], new_16_bit_array[index] / 32768 - 1.0);
-}
-
-
-process.exit(8);
+//     // console.log("new_16_bit_array ", index, new_16_bit_array[index], new_16_bit_array[index] / 32767 - 1.0);
+//     console.log("new_16_bit_array ", index, new_16_bit_array[index], new_16_bit_array[index] / 32768 - 1.0);
+// }
 
 
+// process.exit(8);
 
-new_32_bit_obj.buffer = shared_utils.convert_16_bit_unsigned_int_to_32_bit_float(new_16_bit_obj.buffer);
+
+
+new_32_bit_obj.buffer = shared_utils.convert_16_bit_signed_int_to_32_bit_float(output_16_bit_audio_obj.buffer);
 
 
 
 shared_utils.show_object(new_32_bit_obj.buffer, "total",
             "teeeest new_32_bit_obj teeeest", new_32_bit_obj.buffer.length);
+
+return;
+
 
  // --- now convert back into 16 bit ints --- //
 
