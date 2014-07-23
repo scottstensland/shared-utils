@@ -1095,7 +1095,6 @@ var normalize_buffer = function(audio_obj, spec) {
         };   
 
         // console.log(" CCCCCCC post_processing_min ", post_processing_min, " post_processing_max ", post_processing_max);
-     
     };
 };
 exports.normalize_buffer = normalize_buffer;
@@ -1138,15 +1137,6 @@ function cb_parse_buffer_as_wav_format(input_obj, property_buffer_raw_input_file
 
 function cb_parse_buffer_as_wav_format(input_obj, property_buffer_raw_input_file, property_buffer_input_file, cb_when_done) {
 
-    console.log("TOP TOP TOP cb_parse_buffer_as_wav_format");
-    console.log("TOP TOP TOP cb_parse_buffer_as_wav_format");
-    console.log("TOP TOP TOP cb_parse_buffer_as_wav_format");
-    console.log("TOP TOP TOP cb_parse_buffer_as_wav_format");
-    console.log("TOP TOP TOP cb_parse_buffer_as_wav_format");
-    console.log("TOP TOP TOP cb_parse_buffer_as_wav_format");
-    console.log("TOP TOP TOP cb_parse_buffer_as_wav_format");
-    console.log("TOP TOP TOP cb_parse_buffer_as_wav_format");
-
     // sync NOT async ... output into buffer_input_file
     // shared_utils.parse_wav(input_obj, property_buffer_raw_input_file, property_buffer_input_file);
     parse_wav(input_obj, property_buffer_raw_input_file, property_buffer_input_file);
@@ -1159,7 +1149,7 @@ function cb_parse_buffer_as_wav_format(input_obj, property_buffer_raw_input_file
 
     // var show_object = function (given_obj, given_label, given_mode, limit_size_buffer)
 
-    shared_utils.show_object(input_obj, " POST after reading file ", "total", 10);
+    // shared_utils.show_object(input_obj, " POST after reading file ", "total", 10);
 
     // var read_audio_obj = {};
 
@@ -1169,7 +1159,7 @@ function cb_parse_buffer_as_wav_format(input_obj, property_buffer_raw_input_file
 
     delete input_obj[property_buffer_input_file];    // no longer need raw pre parse buffer
 
-    shared_utils.show_object(input_obj, " WedWedWed input_obj 32 bit floating point ", "total", 10);
+    // shared_utils.show_object(input_obj, " WedWedWed input_obj 32 bit floating point ", "total", 10);
 
     cb_when_done(input_obj);  //  this is defined by original caller to hand back audio object with populated buffer
 

@@ -175,7 +175,8 @@
 		var value_16_bit_signed_int;
 		var index_32_bit_floats = 0;
 
-		var max_to_show = 50;
+		var max_to_show = 0;
+		// var max_to_show = 50;
 
 		for (var index = 0; index < size_source_buffer; index += 2, index_32_bit_floats++) {
 
@@ -212,11 +213,13 @@
 				max_float_value_seen = new_32_bit_array[index_32_bit_floats];
 			}
 
+			/*
 		    if (index < max_to_show) {
 
 			    console.log("c16_32", index, input_8_bit_int_buffer[index], input_8_bit_int_buffer[index + 1], 
 			    					value_16_bit_signed_int, new_32_bit_array[index_32_bit_floats]);	
 		    }
+		    */
 		};
 
 		console.log("max_int_value_seen ", max_int_value_seen, " min_int_value_seen ", min_int_value_seen);
