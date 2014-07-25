@@ -25,7 +25,7 @@ var shared_utils;
 switch (environment_mode) {
 
     case "nubia": // repository owner tinkering mode - ignore it 
-    
+
         var local_github_parent = process.env.GITHUB_REPO_PARENT;
 
         if ( ! local_github_parent ) {
@@ -125,7 +125,7 @@ for (var index = 0; index < max_index; index++) {
 // ----------------------------
 
 
-var output_dir = resolvePath("~/Dropbox/Documents/data/audio/");
+var output_dir = resolvePath(process.env.AUDIO_DIR);
 
 var output_format = ".wav";
 
