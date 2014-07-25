@@ -1197,7 +1197,7 @@ exports.read_16_bit_wav_file_into_32_bit_float_buffer = function(read_wav_file_o
 
 exports.write_32_bit_float_buffer_to_16_bit_wav_file = function(audio_obj, wav_output_filename, spec, db_done) {
 
-    console.log("TTT ___ write_32_bit_float_buffer_to_16_bit_wav_file ___ ");
+    // console.log("TTT ___ write_32_bit_float_buffer_to_16_bit_wav_file ___ ");
 
     var property_buffer = "buffer";   // defaults
     var allowed_minimum = -1.0;       // defaults
@@ -1215,21 +1215,21 @@ exports.write_32_bit_float_buffer_to_16_bit_wav_file = function(audio_obj, wav_o
         // console.log("seeing input spec with spec.property_buffer ", spec.property_buffer);
     };
 
-    console.log("here is spec property_buffer ", property_buffer);
+    // console.log("here is spec property_buffer ", property_buffer);
 
-    console.log("PREE audio_obj[", property_buffer, "].length ", audio_obj[property_buffer].length);
+    // console.log("PREE audio_obj[", property_buffer, "].length ", audio_obj[property_buffer].length);
 
-    console.log("flag_normalize ", spec.flag_normalize);
+    // console.log("flag_normalize ", spec.flag_normalize);
 
     if (true == spec.flag_normalize) {
 
-        console.log("flag_normalize ", spec.flag_normalize, 
-                    " about to call normalize_buffer in write_buffer_to_file");
+        // console.log("flag_normalize ", spec.flag_normalize, 
+        //             " about to call normalize_buffer in write_buffer_to_file");
 
         normalize_buffer(audio_obj, spec);
     }
 
-    console.log("POOOST audio_obj[", property_buffer, "].length ", audio_obj[property_buffer].length);
+    // console.log("POOOST audio_obj[", property_buffer, "].length ", audio_obj[property_buffer].length);
 
     var output_16_bit_audio_obj = {};
 
@@ -1237,14 +1237,14 @@ exports.write_32_bit_float_buffer_to_16_bit_wav_file = function(audio_obj, wav_o
 
     output_16_bit_audio_obj.filename = wav_output_filename;
     
-    shared_utils.show_object(audio_obj, "total",
-            "hhhhhhhhhhhhhhh corindddeeee audio_obj corindddeeee", 10);
+    // shared_utils.show_object(audio_obj, "total",
+    //         "hhhhhhhhhhhhhhh corindddeeee audio_obj corindddeeee", 10);
 
     output_16_bit_audio_obj.buffer = shared_utils.convert_32_bit_float_into_signed_16_bit_int_lossy(audio_obj[property_buffer]);
 
     write_wav(output_16_bit_audio_obj);
 
-    console.log("BBB ___ write_32_bit_float_buffer_to_16_bit_wav_file ___ ");
+    // console.log("BBB ___ write_32_bit_float_buffer_to_16_bit_wav_file ___ ");
 
 };      //      write_32_bit_float_buffer_to_16_bit_wav_file
 
