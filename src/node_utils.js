@@ -11,10 +11,6 @@ var shared_utils = require('./shared_utils');
 
 
 var fs = require('fs');
-
-
-
-    // from ~/Dropbox/Documents/code/js/audio/stream_buffers/stream_buffers/node_utils.js
     
 // ---
 
@@ -896,8 +892,8 @@ buffer.js:564
 TypeError: value is out of bounds
     at checkInt (buffer.js:564:11)
     at Buffer.writeInt16LE (buffer.js:642:5)
-    at convert_32_bit_floats_into_16_bit_ints (/home/stens/Dropbox/Documents/code/github/node-genome/src/node_utils.js:689:40)
-    at Object.exports.write_buffer_to_file (/home/stens/
+    at convert_32_bit_floats_into_16_bit_ints (node-genome/src/node_utils.js:689:40)
+    at Object.exports.write_buffer_to_file 
 
         when above happens - due to input raw float OUTSIDE boundary +1 <=> -1
 
