@@ -327,8 +327,11 @@ var read_file_into_buffer = function(input_file_obj, property_buffer_raw_input_f
 
     input_read_stream.on("error", function (error) {
 
-        console.log("ERROR - failure when attempting to read ", input_file_obj.filename, error);
-        process.exit(8);
+        // console.log("ERROR - failure when attempting to read input file : ", input_file_obj.filename, error);
+        // process.exit(8);
+
+        new Error("ERROR - failure when attempting to read input file : ", input_file_obj.filename, error);
+
     });
 
 
