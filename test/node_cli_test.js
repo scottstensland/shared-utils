@@ -1,8 +1,10 @@
 #!/usr/bin/env node 
 
-var environment_mode = process.argv[2] || "dev";
+var output_dir = process.argv[2] || "/tmp";
 
-console.warn("running code in environment_mode: ", environment_mode);
+var shared_utils = require("../");
+
+console.log("shared_utils ", shared_utils);
 
 // ---
 
@@ -17,61 +19,10 @@ function resolvePath(str) {
 
 // -------------------------------------------------------- //
 
-console.log("do_clustering  ....  environment_mode ", environment_mode);
-
-var that = {};
-var shared_utils;
-
-switch (environment_mode) {
-
-    case "nubia": // repository owner tinkering mode - ignore it 
-
-        var local_github_parent = process.env.GITHUB_REPO_PARENT;
-
-        if ( ! local_github_parent ) {
-
-            console.error("ERROR - do not use environment_mode value of :", environment_mode, 
-                            " instead use dev or leave blank");
-            process.exit(8);
-        }
-
-        console.log("environment_mode is ", environment_mode, " so pulling in sibling dir source code");
-        shared_utils   = require(resolvePath(local_github_parent + "shared-utils/src/node_utils"));
-        break;
-
-    case "dev":
-        shared_utils   = require("shared-utils");    // get these modules from global install
-        break;
-
-    default :
-        shared_utils   = require("shared-utils");
-        break;
-};
-
-console.log("shared_utils ", shared_utils);
-
-// ---
-
 function cb_send_to_browser() {
 
 	console.log("TOP TOP TOP cb_send_to_browser");
 
-};
-
-function cb_after_reading_input_file_grow_curve(input_obj, property_buffer_raw_input_file, property_buffer_input_file) {
-
-    console.log("TOP TOP TOP cb_after_reading_input_file_grow_curve");
-
-    // sync NOT async ... output into buffer_input_file
-    shared_utils.parse_wav(input_obj, property_buffer_raw_input_file, property_buffer_input_file);
-
-    delete input_obj[property_buffer_raw_input_file];    // no longer need raw pre parse buffer
-
-    console.log("buffer size ", input_obj[property_buffer_input_file].length);
-    console.log("buffer size ", input_obj[property_buffer_input_file].length);
-    console.log("buffer size ", input_obj[property_buffer_input_file].length);
-
-    shared_utils.show_object(input_obj, "input_obj", "total", 88);
 };
 
 // ---
@@ -99,7 +50,7 @@ console.log(shared_utils.toFixed(some_neg_var, 5));
 
 // ---------------------
 
-shared_utils.set_random_seed(17);
+shared_utils.set_random_seed(17); // comment out if U want fresh random sequence for each run ... o/w sequence repeats
 
 // ------------  synthesize an audio buffer  ------------  //
 
@@ -125,7 +76,8 @@ for (var index = 0; index < max_index; index++) {
 // ----------------------------
 
 
-var output_dir = resolvePath(process.env.AUDIO_DIR);
+
+// var output_dir = resolvePath(process.env.AUDIO_DIR);
 
 var output_format = ".wav";
 
@@ -153,31 +105,22 @@ console.log("source_wave_filename   ", source_wave_filename);
 
 console.log("\n\nread wav file\n\n");
 
-var wav_file_input_obj = {};  // create stub object to which we attach .buffer
+// IF you have a pre-defined callback to handle output buffer use this
+// shared_utils.read_wav_file(source_wave_filename, cb_read_file_done);
+
+// __ELSE__ this just defines a callback when DONE inline
+
+shared_utils.read_wav_file(source_wave_filename, (function(audio_obj) {
+
+    console.log("cb_read_file_done ");
+
+	console.log("populated buffer size ", audio_obj.buffer.length);
+
+    shared_utils.show_object(audio_obj,
+        "backHome audio_obj 32 bit signed float   read_file_done", "total", 10);
+}));
 
 
-var property_buffer_raw_input_file = "buffer_raw_input_file";
-var property_buffer_input_file     = "buffer_input_file";
-
-wav_file_input_obj.filename = source_wave_filename;
-
-
-wav_file_input_obj[property_buffer_raw_input_file] = new Buffer(0);
-
-
-console.log("abouttttt to read wav_file_input_obj.filename ", wav_file_input_obj.filename);
-
-var spec = {};
-
-shared_utils.read_16_bit_wav_file_into_32_bit_float_buffer(
-                                wav_file_input_obj,
-                                wav_file_input_obj.filename, 
-                                spec,
-                                cb_read_file_done);
-
-
-
-
-
+// --- done --- //
 
 

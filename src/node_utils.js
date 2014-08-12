@@ -325,8 +325,6 @@ var read_file_into_buffer = function(input_file_obj, property_buffer_raw_input_f
         }
     });
 
-
-    // Done, process the big data
     input_read_stream.on("error", function (error) {
 
         console.log("ERROR - failure when attempting to read ", input_file_obj.filename, error);
@@ -334,27 +332,21 @@ var read_file_into_buffer = function(input_file_obj, property_buffer_raw_input_f
     });
 
 
-    // Done, process the big data
+    // Done, process the data
     input_read_stream.on("end", function () {
 
-        console.log('ENNNNNNNNNNDDDD input_file_obj[" + property_buffer_raw_input_file + "].length ', 
-                            input_file_obj[property_buffer_raw_input_file].length);
+        // console.log('ENNNNNNNNNNDDDD input_file_obj[" + property_buffer_raw_input_file + "].length ', 
+        //                     input_file_obj[property_buffer_raw_input_file].length);
 
         // do something with data read from file - parse_wav
 
         console.log("INNN read_file_into_buffer with cb_post_process.name ",cb_post_process.name);
-        // console.log("INNN read_file_into_buffer with cb_when_done.name ",cb_when_done.name);
 
-
-
-        // cb_when_done(input_file_obj, property_buffer_raw_input_file, property_buffer_input_file, cb_when_done);
         cb_post_process(input_file_obj, property_buffer_raw_input_file, property_buffer_input_file, cb_when_done);
 
         // ---
 
-        // delete input_file_obj["raw_buffer"];    // no longer need raw pre parse buffer
-
-        console.log("post callback to parse_wav with property iteration of input_file_obj");
+        // console.log("post callback to parse_wav with property iteration of input_file_obj");
     });
 
 };       //      read_file_into_buffer
@@ -1096,40 +1088,6 @@ var normalize_buffer = function(audio_obj, spec) {
 exports.normalize_buffer = normalize_buffer;
 
 // ---
-/*
-function cb_parse_buffer_as_wav_format(input_obj, property_buffer_raw_input_file, property_buffer_input_file) {
-
-    console.log("TOP TOP TOP cb_parse_buffer_as_wav_format");
-
-    // sync NOT async ... output into buffer_input_file
-    // shared_utils.parse_wav(input_obj, property_buffer_raw_input_file, property_buffer_input_file);
-    parse_wav(input_obj, property_buffer_raw_input_file, property_buffer_input_file);
-
-    delete input_obj[property_buffer_raw_input_file];    // no longer need raw pre parse buffer
-
-    console.log("buffer size ", input_obj[property_buffer_input_file].length);
-    console.log("buffer size ", input_obj[property_buffer_input_file].length);
-    console.log("buffer size ", input_obj[property_buffer_input_file].length);
-
-    // var show_object = function (given_obj, given_label, given_mode, limit_size_buffer)
-
-    shared_utils.show_object(input_obj, " POST after reading file ", "total", 10);
-
-    var read_audio_obj = {};
-
-    // read_audio_obj.buffer = shared_utils.convert_16_bit_unsigned_int_to_32_bit_float(input_obj[property_buffer_input_file]);
-    read_audio_obj.buffer = shared_utils.convert_16_bit_signed_int_to_32_bit_float(input_obj[property_buffer_input_file]);
-
-
-    shared_utils.show_object(read_audio_obj, " WedWedWed read_audio_obj 32 bit floating point ", "total", 10);
-
-
-    // var buff_size_from_file = input_obj[property_buffer_input_file].length;
-    // var size_buffer = 256;
-
-};      //      cb_parse_buffer_as_wav_format
-*/
-// ---
 
 function cb_parse_buffer_as_wav_format(input_obj, property_buffer_raw_input_file, property_buffer_input_file, cb_when_done) {
 
@@ -1140,22 +1098,10 @@ function cb_parse_buffer_as_wav_format(input_obj, property_buffer_raw_input_file
     delete input_obj[property_buffer_raw_input_file];    // no longer need raw pre parse buffer
 
     console.log("buffer size ", input_obj[property_buffer_input_file].length);
-    console.log("buffer size ", input_obj[property_buffer_input_file].length);
-    console.log("buffer size ", input_obj[property_buffer_input_file].length);
 
-    // var show_object = function (given_obj, given_label, given_mode, limit_size_buffer)
-
-    // shared_utils.show_object(input_obj, " POST after reading file ", "total", 10);
-
-    // var read_audio_obj = {};
-
-    // read_audio_obj.buffer = shared_utils.convert_16_bit_unsigned_int_to_32_bit_float(input_obj[property_buffer_input_file]);
-    // read_audio_obj.buffer = shared_utils.convert_16_bit_signed_int_to_32_bit_float(input_obj[property_buffer_input_file]);
     input_obj.buffer = shared_utils.convert_16_bit_signed_int_to_32_bit_float(input_obj[property_buffer_input_file]);
 
     delete input_obj[property_buffer_input_file];    // no longer need raw pre parse buffer
-
-    // shared_utils.show_object(input_obj, " WedWedWed input_obj 32 bit floating point ", "total", 10);
 
     cb_when_done(input_obj);  //  this is defined by original caller to hand back audio object with populated buffer
 
@@ -1163,10 +1109,9 @@ function cb_parse_buffer_as_wav_format(input_obj, property_buffer_raw_input_file
 
 // ---
 
-exports.read_16_bit_wav_file_into_32_bit_float_buffer = function(read_wav_file_obj, wav_input_filename, spec, cb_when_done) {
-// exports.read_16_bit_wav_file_into_32_bit_float_buffer = function(read_wav_file_obj, wav_input_filename, spec) {
+var read_16_bit_wav_file_into_32_bit_float_buffer = function(read_wav_file_obj, wav_input_filename, spec, cb_when_done) {
 
-    console.log("TTT ___ read_16_bit_wav_file_into_32_bit_float_buffer ___ ");
+    // console.log("TTT ___ read_16_bit_wav_file_into_32_bit_float_buffer ___ ");
 
     // ---
 
@@ -1185,9 +1130,39 @@ exports.read_16_bit_wav_file_into_32_bit_float_buffer = function(read_wav_file_o
                                     cb_parse_buffer_as_wav_format,
                                     cb_when_done);
 
-    console.log("BBB ___ read_16_bit_wav_file_into_32_bit_float_buffer ___ ");
+    // console.log("BBB ___ read_16_bit_wav_file_into_32_bit_float_buffer ___ ");
 
 };      //      read_16_bit_wav_file_into_32_bit_float_buffer
+// NOT for export --- internal consumption ONLY its outer wrapper is called read_wav_file
+
+// ---
+
+var read_wav_file = function(input_filename, cb_read_file_done) {
+
+    // ------------ read wav file -------------------- //
+
+    // console.log("\n\nread wav file\n\n");
+
+    var wav_file_input_obj = {};  // create stub object to which we attach .buffer
+
+    var property_buffer_raw_input_file = "buffer_raw_input_file";
+
+    wav_file_input_obj.filename = input_filename;
+
+    wav_file_input_obj[property_buffer_raw_input_file] = new Buffer(0);
+
+    // console.log("abouttttt to read wav_file_input_obj.filename ", wav_file_input_obj.filename);
+
+    var spec = {};
+
+    read_16_bit_wav_file_into_32_bit_float_buffer(
+                                    wav_file_input_obj,
+                                    wav_file_input_obj.filename, 
+                                    spec,
+                                    cb_read_file_done);
+};
+exports.read_wav_file = read_wav_file;
+
 
 // ---
 
