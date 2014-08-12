@@ -1144,7 +1144,14 @@ var read_wav_file = function(input_filename, cb_read_file_done) {
 
     // ------------ read wav file -------------------- //
 
-    // console.log("\n\nread wav file\n\n");
+    console.log("read_wav_file with input_filename ", input_filename);
+
+    if (! fs.existsSync(input_filename)) {
+
+        new Error("ERROR - failed to find input_filename ", input_filename);
+    }
+
+    // bbb
 
     var wav_file_input_obj = {};  // create stub object to which we attach .buffer
 
