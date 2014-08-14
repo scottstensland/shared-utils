@@ -7,6 +7,10 @@ var shared_utils = require('./shared_utils');
 // var hierarchical_cluster = require('./hierarchical_cluster');
 
 
+var package_json = require('../package.json');
+console.log(package_json.name, package_json.version);
+
+
 // var jdataview = require('jdataview');
 
 
@@ -327,7 +331,7 @@ var read_file_into_buffer = function(input_file_obj, property_buffer_raw_input_f
 
     input_read_stream.on("error", function (error) {
 
-        // console.log("ERROR - failure when attempting to read input file : ", input_file_obj.filename, error);
+        console.error("ERROR - failure when attempting to read input file : ", input_file_obj.filename, error);
         // process.exit(8);
 
         new Error("ERROR - failure when attempting to read input file : ", input_file_obj.filename, error);
@@ -1114,7 +1118,7 @@ function cb_parse_buffer_as_wav_format(input_obj, property_buffer_raw_input_file
 
 var read_16_bit_wav_file_into_32_bit_float_buffer = function(read_wav_file_obj, wav_input_filename, spec, cb_when_done) {
 
-    // console.log("TTT ___ read_16_bit_wav_file_into_32_bit_float_buffer ___ ");
+    console.log("TTT ___ read_16_bit_wav_file_into_32_bit_float_buffer ___ ");
 
     // ---
 
@@ -1133,7 +1137,7 @@ var read_16_bit_wav_file_into_32_bit_float_buffer = function(read_wav_file_obj, 
                                     cb_parse_buffer_as_wav_format,
                                     cb_when_done);
 
-    // console.log("BBB ___ read_16_bit_wav_file_into_32_bit_float_buffer ___ ");
+    console.log("BBB ___ read_16_bit_wav_file_into_32_bit_float_buffer ___ ");
 
 };      //      read_16_bit_wav_file_into_32_bit_float_buffer
 // NOT for export --- internal consumption ONLY its outer wrapper is called read_wav_file
@@ -1145,11 +1149,6 @@ var read_wav_file = function(input_filename, cb_read_file_done) {
     // ------------ read wav file -------------------- //
 
     console.log("read_wav_file with input_filename ", input_filename);
-
-    if (! fs.existsSync(input_filename)) {
-
-        new Error("ERROR - failed to find input_filename ", input_filename);
-    }
 
     // bbb
 
