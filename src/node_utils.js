@@ -1,14 +1,17 @@
 
 (function(exports) {
 
+console.log(require('../package.json').name, require('../package.json').version);
+
 
 var shared_utils = require('./shared_utils');
 // var audio_utils = require('./audio_utils');
 // var hierarchical_cluster = require('./hierarchical_cluster');
 
 
-var package_json = require('../package.json');
-console.log(package_json.name, package_json.version);
+// var package_json = require('../package.json');
+// console.log(package_json.name, package_json.version);
+
 
 
 // var jdataview = require('jdataview');
