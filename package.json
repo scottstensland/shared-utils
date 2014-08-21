@@ -20,10 +20,15 @@
     "random"
   ],
   "author": "Scott Stensland <scottstensland@gmail.com> (http://catfoodnation.com/)",
-  "license": "ISC",
   "bugs": {
     "url": "https://github.com/scottstensland/shared-utils/issues"
   },
   "homepage": "https://github.com/scottstensland/shared-utils",
-  "version": "0.1.2"
+  "licenses": [
+    {
+      "type": "WTFPL – Do What the Fuck You Want to Public License",
+      "url": "http://www.wtfpl.net"
+    }
+  ],
+  "version": "0.1.3"
 }
