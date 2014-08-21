@@ -455,10 +455,6 @@ var write_wav = function(wav_file_obj) {
     console.log("FFFFFFFF filename ", path);
 
 
-
-
-
-
     // ---
 
     var size_header = 44;   // constant number of bytes in WAV header as per spec
