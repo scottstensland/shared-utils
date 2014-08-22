@@ -37,11 +37,6 @@ exports.convert_16_bit_signed_int_to_32_bit_float           = shared_utils.conve
 exports.convert_32_bit_float_into_signed_16_bit_int_lossy   = shared_utils.convert_32_bit_float_into_signed_16_bit_int_lossy;
 
 
-// exports.pop_audio_buffer                                = audio_utils.pop_audio_buffer;
-// exports.detect_fundamental_frequency                    = audio_utils.detect_fundamental_frequency;
-
-
-
 // ---
 
 var convert_16_bit_signed_ints_into_32_bit_floats = function(audio_buffer, size_buffer) {
