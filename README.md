@@ -11,6 +11,9 @@ Available at https://github.com/scottstensland/shared-utils
 
 ```js
 
+var shared_utils = require("shared-utils");
+var path = require('path');
+
 var SIZE_BUFFER_SOURCE = 256;
 
 var source_obj = {}; // we populate its buffer with random float values then save to output WAV file 
@@ -23,7 +26,7 @@ for (var index = 0; index < max_index; index++) {
 
     source_obj.buffer[index] = shared_utils.get_random_in_range_inclusive_float(-1.0, 1.0);
 
-    console.log(index, " pop_audio_buffer ", source_obj.buffer[index]);
+    // console.log(index, " pop_audio_buffer ", source_obj.buffer[index]);
 }
 
 ```

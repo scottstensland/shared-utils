@@ -66,8 +66,6 @@
 
 		// this method is LOSSY - intended as preliminary step when saving audio into WAV format files
 
-		// output_16_bit_obj.buffer = new Buffer(0);// input buffer is 32 bit we want 16 bit so half it
-
 	    var size_source_buffer = input_32_bit_buffer.length;
 
 	    var new_16_bit_array = new Uint16Array(size_source_buffer);
@@ -87,21 +85,15 @@
 
 	        if (prelim_value !== new_16_bit_array[index]) {
 
-	        	// console.error("NOTICE - seeing mismatch btw prelim_value: ", prelim_value, 
-	        	// 			" and post 16 bit: ", new_16_bit_array[index]);
-
-	        	// process.exit(8);
-
 	        	if (prelim_value > max_valid_16_bit_integer) {
 
 	        		new_16_bit_array[index] = max_valid_16_bit_integer;
+
 	        	} else if (prelim_value < 0) {
 
 	        		new_16_bit_array[index] = 0;
 	        	}
 	        };
-
-	        // output_16_bit_obj.buffer[index] = new_16_bit_array[index];
 	    }
 
 	    return new_16_bit_array;
@@ -157,32 +149,20 @@
 
 		var size_source_buffer = input_8_bit_int_buffer.length;
 
-		// var max_valid_input_value = 2 >> 16 - 1;
-
-		// console.log("max_valid_input_value ", max_valid_input_value);
-
 		var new_32_bit_array = new Float32Array(input_8_bit_int_buffer.length / 2);
 
 		var max_int_value_seen = -99999.9;
 		var min_int_value_seen =  99999.9;
 
-
 		var max_float_value_seen = -99999.9;
 		var min_float_value_seen =  99999.9;
-
 
 		var tmp_16_bit_signed_int;
 		var value_16_bit_signed_int;
 		var index_32_bit_floats = 0;
 
-		var max_to_show = 0;
-		// var max_to_show = 50;
-
 		for (var index = 0; index < size_source_buffer; index += 2, index_32_bit_floats++) {
 
-			// console.log(index, input_8_bit_int_buffer[index]);
-
-			// value_16_bit_signed_int = (input_8_bit_int_buffer[index] << 8) | input_8_bit_int_buffer[index + 1];
 			tmp_16_bit_signed_int = (input_8_bit_int_buffer[index + 1] << 8) | input_8_bit_int_buffer[index];
 
 			value_16_bit_signed_int = conv_bit_size(tmp_16_bit_signed_int, bits_per_sample);
@@ -212,14 +192,6 @@
 
 				max_float_value_seen = new_32_bit_array[index_32_bit_floats];
 			}
-
-			/*
-		    if (index < max_to_show) {
-
-			    console.log("c16_32", index, input_8_bit_int_buffer[index], input_8_bit_int_buffer[index + 1], 
-			    					value_16_bit_signed_int, new_32_bit_array[index_32_bit_floats]);	
-		    }
-		    */
 		};
 
 		console.log("max_int_value_seen ", max_int_value_seen, " min_int_value_seen ", min_int_value_seen);
@@ -239,80 +211,25 @@
 
 	    var size_source_buffer = input_32_bit_buffer.length;
 
-		console.log("TOP convert_32_bit_float_into_signed_16_bit_int_lossy  buff size ", size_source_buffer);
-
-	    // var new_16_bit_signed_int = new Int16Array(size_source_buffer);
-
-	    // var max_valid_16_bit_integer = -1 + Math.pow(2, 16);
-
-	    // var buffer_byte_array = new Buffer(size_source_buffer * 2); // NO fails to store negative numbers
-	    // var buffer_byte_array = new Int8Array(size_source_buffer * 2); // Int8Array 8-bit twos complement signed integer
 	    var buffer_byte_array = new Int16Array(size_source_buffer * 2); // Int8Array 8-bit twos complement signed integer
-
-// bbb
-	    // console.log("max_valid_16_bit_integer ", max_valid_16_bit_integer);
-
-	    // ---
 
 	    var value_16_bit_signed_int;
 	    var index_byte = 0;
 
-	    var max_to_show = 9;
 
 	    for (var index = 0; index < size_source_buffer; index++) {
-
-	        // prelim_value = ~~((input_32_bit_buffer[index] + 1.0) * 32768);
-	        // value_16_bit_signed_int = ~~((0 < input_32_bit_buffer[index]) ? input_32_bit_buffer[index] * 0x7FFF : 
-	        // 																input_32_bit_buffer[index] * 0x8000);
-
 
 	        value_16_bit_signed_int = ~~((0 < input_32_bit_buffer[index]) ? input_32_bit_buffer[index] * 0x7FFF : 
 	        																input_32_bit_buffer[index] * 0x8000);
 
-
-	        // new_16_bit_signed_int[index] = prelim_value;
-
 	        buffer_byte_array[index_byte] = value_16_bit_signed_int & 0xFF;
-	        // buffer_byte_array[index_byte + 1] = (value_16_bit_signed_int >> 8) & 0xFF;
-	        var byte_two_of_two = (value_16_bit_signed_int >> 8);
 
+	        var byte_two_of_two = (value_16_bit_signed_int >> 8);
 
 	        buffer_byte_array[index_byte + 1] = byte_two_of_two;
 
-	        if (index < max_to_show) {
-
-		        console.log(index, " c32bfTO16bs ", input_32_bit_buffer[index], value_16_bit_signed_int,
-		        				buffer_byte_array[index_byte], buffer_byte_array[index_byte + 1], byte_two_of_two);	        	
-	        }
-
-	        /*
-	        if (prelim_value !== new_16_bit_signed_int[index]) {
-
-	        	console.error("NOTICE - seeing mismatch btw prelim_value: ", prelim_value, 
-	        				" and post 16 bit: ", new_16_bit_signed_int[index]);
-
-	        	// process.exit(8);
-
-	        	if (prelim_value > max_valid_16_bit_integer) {
-
-	        		new_16_bit_signed_int[index] = max_valid_16_bit_integer;
-	        	} else if (prelim_value < 0) {
-
-	        		new_16_bit_signed_int[index] = 0;
-	        	}
-	        };  */
-
 	        index_byte += 2;
 	    };
-
-	    // ---
-
-	    // var zap_this_obj = {};
-
-	    // zap_this_obj.buffer = buffer_byte_array;
-
-    	// show_object(zap_this_obj, " TTccwwEE zap_this_obj 16 bit signed int ", "total", 10);
-
 
 	    // ---
 
@@ -332,11 +249,6 @@
 		var label = given_label || "";
 
 		var size_buffer = limit_size_buffer;
-
-		// if (0 != size_buffer) {
-
-		// 	size_buffer = 10;
-		// }
 
 		console.log("_______TOP limit_size_buffer ", limit_size_buffer);
 		console.log("_______TOP size_buffer       ", size_buffer);
@@ -558,8 +470,6 @@
         };
 
 	    console.log("extent ", extent);
-
-
 
 	};
 	exports.diff_buffers = diff_buffers;
