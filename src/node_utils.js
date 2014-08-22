@@ -1,21 +1,9 @@
 
 (function(exports) {
 
-console.log(require('../package.json').name, require('../package.json').version);
-
+// console.log(require('../package.json').name, require('../package.json').version);
 
 var shared_utils = require('./shared_utils');
-// var audio_utils = require('./audio_utils');
-// var hierarchical_cluster = require('./hierarchical_cluster');
-
-
-// var package_json = require('../package.json');
-// console.log(package_json.name, package_json.version);
-
-
-
-// var jdataview = require('jdataview');
-
 
 var fs = require('fs');
     
@@ -36,32 +24,19 @@ exports.convert_16_bit_unsigned_int_to_32_bit_float         = shared_utils.conve
 exports.convert_16_bit_signed_int_to_32_bit_float           = shared_utils.convert_16_bit_signed_int_to_32_bit_float;
 exports.convert_32_bit_float_into_signed_16_bit_int_lossy   = shared_utils.convert_32_bit_float_into_signed_16_bit_int_lossy;
 
-
 // ---
 
-var convert_16_bit_signed_ints_into_32_bit_floats = function(audio_buffer, size_buffer) {
+/*  SEE shared_utils.convert_16_bit_signed_int_to_32_bit_float
 
-/*
-    float[] floats = new float[bytes.length / 2];
+var convert_16_bit_signed_ints_into_32_bit_floats = function(audio_buffer) {
 
-    for(int i=0; i < bytes.length; i+=2) {
-        floats[i/2] = bytes[i] | (bytes[i+1] << 8);
-    }
-    return floats;
-*/
-    // ---
+    var size_buffer = audio_buffer.length;
 
-    
-    // var buffer_32_bit_floats = new Float32Array(size_buffer);
     var buffer_32_bit_floats = new Float32Array(~~(size_buffer / 2)); // integer division by 2
     var index_float = 0;
 
     for (var index_16_bit = 0; index_16_bit < size_buffer;) {
 
-        // buffer_32_bit_floats[index_float] = audio_buffer[index_16_bit] | (audio_buffer[index_16_bit + 1] << 8);
-        // buffer_32_bit_floats[index_float] = shared_utils.convert_to_int_32(audio_buffer[index_16_bit] | (audio_buffer[index_16_bit + 1] << 8));
-        // buffer_32_bit_floats[index_float] = shared_utils.convert_to_int_32(audio_buffer[index_16_bit] | (audio_buffer[index_16_bit + 1] << 16));
-        // buffer_32_bit_floats[index_float] = (audio_buffer[index_16_bit] | (audio_buffer[index_16_bit + 1] << 16)) / 32768;
         buffer_32_bit_floats[index_float] =  -1 + (audio_buffer[index_16_bit] | (audio_buffer[index_16_bit + 1] << 8)) / 32768;
 
         index_16_bit += 2;
@@ -72,6 +47,7 @@ var convert_16_bit_signed_ints_into_32_bit_floats = function(audio_buffer, size_
 
 };
 exports.convert_16_bit_signed_ints_into_32_bit_floats = convert_16_bit_signed_ints_into_32_bit_floats;
+*/
 
 // ---
 
@@ -1101,6 +1077,9 @@ function cb_parse_buffer_as_wav_format(input_obj, property_buffer_raw_input_file
     console.log("buffer size ", input_obj[property_buffer_input_file].length);
 
     input_obj.buffer = shared_utils.convert_16_bit_signed_int_to_32_bit_float(input_obj[property_buffer_input_file]);
+    // input_obj.buffer =              convert_16_bit_signed_ints_into_32_bit_floats(input_obj[property_buffer_input_file]);
+
+// bbb
 
     delete input_obj[property_buffer_input_file];    // no longer need raw pre parse buffer
 
@@ -1171,39 +1150,22 @@ exports.read_wav_file = read_wav_file;
 
 exports.write_32_bit_float_buffer_to_16_bit_wav_file = function(audio_obj, wav_output_filename, spec, db_done) {
 
-    // console.log("TTT ___ write_32_bit_float_buffer_to_16_bit_wav_file ___ ");
-
     var property_buffer = "buffer";   // defaults
-    var allowed_minimum = -1.0;       // defaults
-    var allowed_maximum = +1.0;       // defaults
 
     var really_big_number = 999999.9;
 
-    var spec = spec || { flag_normalize : false };
+    var spec = spec || { flag_normalize : false }; // flag to normalize input into float range -1 <--> +1
     // var spec = spec || { flag_normalize : true };
 
     if (typeof spec.property_buffer !== "undefined") {
 
         property_buffer = spec.property_buffer;
-
-        // console.log("seeing input spec with spec.property_buffer ", spec.property_buffer);
     };
-
-    // console.log("here is spec property_buffer ", property_buffer);
-
-    // console.log("PREE audio_obj[", property_buffer, "].length ", audio_obj[property_buffer].length);
-
-    // console.log("flag_normalize ", spec.flag_normalize);
 
     if (true == spec.flag_normalize) {
 
-        // console.log("flag_normalize ", spec.flag_normalize, 
-        //             " about to call normalize_buffer in write_buffer_to_file");
-
         normalize_buffer(audio_obj, spec);
     }
-
-    // console.log("POOOST audio_obj[", property_buffer, "].length ", audio_obj[property_buffer].length);
 
     var output_16_bit_audio_obj = {};
 
@@ -1217,8 +1179,6 @@ exports.write_32_bit_float_buffer_to_16_bit_wav_file = function(audio_obj, wav_o
     output_16_bit_audio_obj.buffer = shared_utils.convert_32_bit_float_into_signed_16_bit_int_lossy(audio_obj[property_buffer]);
 
     write_wav(output_16_bit_audio_obj);
-
-    // console.log("BBB ___ write_32_bit_float_buffer_to_16_bit_wav_file ___ ");
 
 };      //      write_32_bit_float_buffer_to_16_bit_wav_file
 

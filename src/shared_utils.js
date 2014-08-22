@@ -127,9 +127,37 @@
 
 	// ----------------------
 
+// Here are actual values of input and output to below function : conv_bit_size
+
+// tmp_16_bit_unsigned_int  7640  value_16_bit_signed_int  7640
+// tmp_16_bit_unsigned_int  14867  value_16_bit_signed_int  14867
+// tmp_16_bit_unsigned_int  62740  value_16_bit_signed_int  -2796
+// tmp_16_bit_unsigned_int  4315  value_16_bit_signed_int  4315
+// tmp_16_bit_unsigned_int  11748  value_16_bit_signed_int  11748
+// tmp_16_bit_unsigned_int  18670  value_16_bit_signed_int  18670
+// tmp_16_bit_unsigned_int  61341  value_16_bit_signed_int  -4195
+// tmp_16_bit_unsigned_int  12419  value_16_bit_signed_int  12419
+// tmp_16_bit_unsigned_int  16181  value_16_bit_signed_int  16181
+// tmp_16_bit_unsigned_int  10844  value_16_bit_signed_int  10844
+// tmp_16_bit_unsigned_int  7996  value_16_bit_signed_int  7996
+// tmp_16_bit_unsigned_int  45917  value_16_bit_signed_int  -19619
+// tmp_16_bit_unsigned_int  6519  value_16_bit_signed_int  6519
+// tmp_16_bit_unsigned_int  60905  value_16_bit_signed_int  -4631
+// tmp_16_bit_unsigned_int  64360  value_16_bit_signed_int  -1176
+// tmp_16_bit_unsigned_int  44422  value_16_bit_signed_int  -21114
+// tmp_16_bit_unsigned_int  39909  value_16_bit_signed_int  -25627
+// tmp_16_bit_unsigned_int  2329  value_16_bit_signed_int  2329
+// tmp_16_bit_unsigned_int  14431  value_16_bit_signed_int  14431
+// tmp_16_bit_unsigned_int  25039  value_16_bit_signed_int  25039
+// tmp_16_bit_unsigned_int  14158  value_16_bit_signed_int  14158
+// tmp_16_bit_unsigned_int  58865  value_16_bit_signed_int  -6671
+// tmp_16_bit_unsigned_int  37502  value_16_bit_signed_int  -28034
+
+
 	var conv_bit_size = function(input_unsigned_int, bits_per_sample) { // converts unsigned into signed
 
-	// const unsigned int max = (1 << (bits_per_sample - 1)) - 1;
+		//see above cut N paste of actual samples of input N output to this function
+
 		var max = (1 << (bits_per_sample - 1)) - 1;
 
 		return ((input_unsigned_int > max) ? input_unsigned_int - ((max << 1) + 2) : input_unsigned_int);
@@ -157,16 +185,22 @@
 		var max_float_value_seen = -99999.9;
 		var min_float_value_seen =  99999.9;
 
-		var tmp_16_bit_signed_int;
+		// var tmp_16_bit_signed_int;
+		var tmp_16_bit_unsigned_int;
+
 		var value_16_bit_signed_int;
 		var index_32_bit_floats = 0;
 
 		for (var index = 0; index < size_source_buffer; index += 2, index_32_bit_floats++) {
 
-			tmp_16_bit_signed_int = (input_8_bit_int_buffer[index + 1] << 8) | input_8_bit_int_buffer[index];
+			// tmp_16_bit_signed_int = (input_8_bit_int_buffer[index + 1] << 8) | input_8_bit_int_buffer[index];
+			tmp_16_bit_unsigned_int = (input_8_bit_int_buffer[index + 1] << 8) | input_8_bit_int_buffer[index];
 
-			value_16_bit_signed_int = conv_bit_size(tmp_16_bit_signed_int, bits_per_sample);
+			// value_16_bit_signed_int = conv_bit_size(tmp_16_bit_signed_int, bits_per_sample);
+			value_16_bit_signed_int = conv_bit_size(tmp_16_bit_unsigned_int, bits_per_sample);
 
+			console.log("tmp_16_bit_unsigned_int ", tmp_16_bit_unsigned_int, 
+					   " value_16_bit_signed_int ", value_16_bit_signed_int);
 
 			if (value_16_bit_signed_int < min_int_value_seen) {
 

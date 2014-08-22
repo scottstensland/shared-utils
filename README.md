@@ -31,7 +31,7 @@ for (var index = 0; index < max_index; index++) {
 
 ```
 
-### write to output file
+### write typed array 32 bit float buffer (Float32Array) to output file WAV format
 
 ```js
 
