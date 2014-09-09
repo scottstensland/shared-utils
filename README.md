@@ -7,12 +7,38 @@ Contains useful utilities like random number generator for ints or floats in min
 
 Available at https://github.com/scottstensland/shared-utils
 
-### synthesize an audio buffer
+
+
+### synthesize an audio buffer with random noise OR sinusoidal curve
+
+```js
+
+// ------------  populate buffer with sin curve ------------  //
+
+// var SIZE_BUFFER_SOURCE = 5;
+var SIZE_BUFFER_SOURCE = 256;
+// var SIZE_BUFFER_SOURCE = 4096;
+// var SIZE_BUFFER_SOURCE = 16384;
+
+var samples_per_cycle = 64;
+
+var source_obj = {}; // we populate its buffer then save to output WAV file 
+var target_obj = {}; // then read back WAV file to populate this target buffer then do curve diff to confirm curves match
+
+source_obj = audio_utils.pop_audio_buffer(SIZE_BUFFER_SOURCE, samples_per_cycle);
+
+```
+
+
+### synthesize an audio buffer with random noise
 
 ```js
 
 var shared_utils = require("shared-utils");
 var path = require('path');
+
+shared_utils.set_random_seed(17); // comment out if U want fresh random sequence for each run 
+                                  // otherwise random sequence repeats across subsequent runs of this script
 
 var SIZE_BUFFER_SOURCE = 256;
 
@@ -31,7 +57,7 @@ for (var index = 0; index < max_index; index++) {
 
 ```
 
-### write typed array 32 bit float buffer (Float32Array) to output file WAV format
+### write typed array 32 bit float buffer (Float32Array) to output file WAV format 16 bit precision
 
 ```js
 

@@ -85,10 +85,10 @@ var parse_wav = function(wav_input_file_obj, property_input_buffer, property_out
     // var raw_buffer = wav_input_file_obj.raw_buffer;   // entire contents of input file which is parsed 
     var local_input_buffer = wav_input_file_obj[property_input_buffer];   // entire contents of input file which is parsed 
 
-    console.log("top of parse_wav +++++++++++++++++++++  local_input_buffer.length ", local_input_buffer.length,
-                " typeof local_input_buffer ", typeof local_input_buffer,
-                " instanceof local_input_buffer ", (local_input_buffer instanceof Array) ? "Array" : "other"
-                );
+    // console.log("top of parse_wav +++++++++++++++++++++  local_input_buffer.length ", local_input_buffer.length,
+    //             " typeof local_input_buffer ", typeof local_input_buffer,
+    //             " instanceof local_input_buffer ", (local_input_buffer instanceof Array) ? "Array" : "other"
+    //             );
 
     var size_header = 44;
     var offset = 0;
@@ -126,25 +126,25 @@ var parse_wav = function(wav_input_file_obj, property_input_buffer, property_out
     var chunckSize;
     chunckSize = local_input_buffer.readUInt32LE(offset);   //  chunckSize 4 offset 4 bytes
     offset += 4;
-    console.log("on read ... chunckSize ", chunckSize);
+    // console.log("on read ... chunckSize ", chunckSize);
 
 
     local_input_buffer.copy(WAVE, 0, offset, offset + WAVE.length); //  format 8 offset 4 bytes
     offset += 4;
-    console.log("on read ... WAVE is what  ", WAVE.toString('ascii', 0, WAVE.length), " WAVE.length ", WAVE.length);
+    // console.log("on read ... WAVE is what  ", WAVE.toString('ascii', 0, WAVE.length), " WAVE.length ", WAVE.length);
 
 
 
 
     local_input_buffer.copy(fmt, 0, offset, offset + fmt.length);// subchunk1ID  12 offset 4 bytes
     offset += 4;
-    console.log("on read ... fmt is what  ", fmt.toString('ascii', 0, fmt.length), " fmt.length ", fmt.length);
+    // console.log("on read ... fmt is what  ", fmt.toString('ascii', 0, fmt.length), " fmt.length ", fmt.length);
 
 
 
     wav_input_file_obj.pcm_format = local_input_buffer.readUInt32LE(offset);   //  subchunk1Size 16 offset 4 bytes
     offset += 4;
-    console.log("on read ... pcm_format ", wav_input_file_obj.pcm_format);
+    // console.log("on read ... pcm_format ", wav_input_file_obj.pcm_format);
     // valid values of Chunk size :   16 or 18 or 40
 
 
@@ -152,54 +152,54 @@ var parse_wav = function(wav_input_file_obj, property_input_buffer, property_out
 
     wav_input_file_obj.audio_format = local_input_buffer.readUInt16LE(offset);   //  audioFormat 20 offset 2 bytes
     offset += 2;
-    console.log('on read ... audio_format ', wav_input_file_obj.audio_format);
+    // console.log('on read ... audio_format ', wav_input_file_obj.audio_format);
 
 
     wav_input_file_obj.num_channels = local_input_buffer.readUInt16LE(offset);   //  numChannels 22 offset 2 bytes
     offset += 2;
-    console.log('on read ... num_channels ', wav_input_file_obj.num_channels);
+    // console.log('on read ... num_channels ', wav_input_file_obj.num_channels);
     //  Number of interleaved channels
 
 
 
     wav_input_file_obj.sample_rate = local_input_buffer.readUInt32LE(offset);   //  sampleRate 24 offset 4 bytes
     offset += 4;
-    console.log('on read ... sample_rate ', wav_input_file_obj.sample_rate);
+    // console.log('on read ... sample_rate ', wav_input_file_obj.sample_rate);
     // blocks per second
 
 
     wav_input_file_obj.byte_rate = local_input_buffer.readUInt32LE(offset);   //  byteRate 28 offset 4 bytes
     offset += 4;
-    console.log("on read ... byte_rate ", wav_input_file_obj.byte_rate);
-    // byteRate = sampleRate * numChannels * bitDepth / 8;
+    // console.log("on read ... byte_rate ", wav_input_file_obj.byte_rate);
+
     wav_input_file_obj.bit_depth = (wav_input_file_obj.byte_rate * 8.0) / 
                                     (wav_input_file_obj.sample_rate * wav_input_file_obj.num_channels);
-    console.log("on read ... bit_depth    ", wav_input_file_obj.bit_depth);
+    // console.log("on read ... bit_depth    ", wav_input_file_obj.bit_depth);
     // average bytes per second - data rate
 
 
     wav_input_file_obj.block_align = local_input_buffer.readUInt16LE(offset);   //  blockAlign 32 offset 2 bytes
     offset += 2;
-    console.log("on read ... block_align ", wav_input_file_obj.block_align);
+    // console.log("on read ... block_align ", wav_input_file_obj.block_align);
     // data block size in bytes
 
 
     wav_input_file_obj.bits_per_sample = local_input_buffer.readUInt16LE(offset);   //  bitsPerSample 34 offset 2 bytes
     offset += 2;
-    console.log("on read ... bits_per_sample ", wav_input_file_obj.bits_per_sample);
+    // console.log("on read ... bits_per_sample ", wav_input_file_obj.bits_per_sample);
     // bits per sample
 
 
 
     local_input_buffer.copy(data, 0, offset, offset + data.length); //  subchunk2ID 36 offset 4 bytes
     offset += 4;
-    console.log("data is what  ", data.toString('ascii', 0, data.length), " data.length ", data.length);
+    // console.log("data is what  ", data.toString('ascii', 0, data.length), " data.length ", data.length);
 
 
     var subchunk2Size;
     subchunk2Size = local_input_buffer.readUInt32LE(offset);   //  subchunk2Size 36 offset 4 bytes
     offset += 4;
-    console.log("subchunk2Size ", subchunk2Size);
+    // console.log("subchunk2Size ", subchunk2Size);
 
 
     if (! (size_header == offset)) {
@@ -210,12 +210,12 @@ var parse_wav = function(wav_input_file_obj, property_input_buffer, property_out
         console.log(err_msg);
     }
 
-    console.log("end of read header ......... offset ", offset);
+    // console.log("end of read header ......... offset ", offset);
 
 
     var size_buffer = wav_input_file_obj[property_input_buffer].length - size_header;
 
-    console.log(" ......... size_buffer ", size_buffer);
+    // console.log(" ......... size_buffer ", size_buffer);
 
     // wav_input_file_obj.buffer = new Buffer(size_buffer);
     // local_input_buffer.copy(wav_input_file_obj.buffer, 0, offset, offset + size_buffer);
@@ -225,20 +225,19 @@ var parse_wav = function(wav_input_file_obj, property_input_buffer, property_out
 
     local_input_buffer.copy(wav_input_file_obj[property_output_buffer], 0, offset, offset + size_buffer);
 
-    console.log("end of read payload buffer size  ", wav_input_file_obj[property_output_buffer].length);
+    // console.log("end of read payload buffer size  ", wav_input_file_obj[property_output_buffer].length);
 
     // -------- now show count number samples
 
     // NumSamples = NumBytes / (NumChannels * BitsPerSample / 8)
 
 
-    console.log("ssssssssssss      size_buffer ", size_buffer);
-    console.log("ssssssssssss     num_channels ", wav_input_file_obj.num_channels);
-    console.log("ssssssssssss  bits_per_sample ", wav_input_file_obj.bits_per_sample);
+    // console.log("ssssssssssss      size_buffer ", size_buffer);
+    // console.log("ssssssssssss     num_channels ", wav_input_file_obj.num_channels);
+    // console.log("ssssssssssss  bits_per_sample ", wav_input_file_obj.bits_per_sample);
 
-    var num_samples = size_buffer / (wav_input_file_obj.num_channels * wav_input_file_obj.bits_per_sample / 8);
-
-    console.log("ssssssssssss  num_samples ", num_samples);
+    // var num_samples = size_buffer / (wav_input_file_obj.num_channels * wav_input_file_obj.bits_per_sample / 8);
+    // console.log("ssssssssssss  num_samples ", num_samples);
 
 };       //      parse_wav
 // exports.parse_wav = parse_wav;
@@ -248,11 +247,11 @@ var parse_wav = function(wav_input_file_obj, property_input_buffer, property_out
 var read_file_into_buffer = function(input_file_obj, property_buffer_raw_input_file, 
                                     property_buffer_input_file, cb_post_process, cb_when_done) {
 
-    console.log("thuthuthu IIIIIIIII inside read_file_into_buffer   filename ", input_file_obj.filename);
+    // console.log("thuthuthu IIIIIIIII inside read_file_into_buffer   filename ", input_file_obj.filename);
 
 
-    console.log("thuthuthu IIIIIIIII cb_when_done ", cb_when_done.name);
-    console.log("thuthuthu IIIIIIIII cb_post_process ", cb_post_process.name);
+    // console.log("thuthuthu IIIIIIIII cb_when_done ", cb_when_done.name);
+    // console.log("thuthuthu IIIIIIIII cb_post_process ", cb_post_process.name);
 
 
 
@@ -312,16 +311,14 @@ var read_file_into_buffer = function(input_file_obj, property_buffer_raw_input_f
 
     });
 
-
     // Done, process the data
+
     input_read_stream.on("end", function () {
 
-        // console.log('ENNNNNNNNNNDDDD input_file_obj[" + property_buffer_raw_input_file + "].length ', 
-        //                     input_file_obj[property_buffer_raw_input_file].length);
 
         // do something with data read from file - parse_wav
 
-        console.log("INNN read_file_into_buffer with cb_post_process.name ",cb_post_process.name);
+        // console.log("INNN read_file_into_buffer with cb_post_process.name ",cb_post_process.name);
 
         cb_post_process(input_file_obj, property_buffer_raw_input_file, property_buffer_input_file, cb_when_done);
 
@@ -332,14 +329,13 @@ var read_file_into_buffer = function(input_file_obj, property_buffer_raw_input_f
 
 };       //      read_file_into_buffer
 // this is NOT for export for INTERNAL usage ONLY
-// exports.read_file_into_buffer = read_file_into_buffer;
 
 // ---
 
 // exports.write_wav = function(wav_file_obj) {
 var write_wav = function(wav_file_obj) {
 
-    console.log("~~~~~~~~~ TOP write_wav ~~~~~~~~~");
+    // console.log("~~~~~~~~~ TOP write_wav ~~~~~~~~~");
 
     // --- iterate across all properties of given audio file object to see things like sample_rate
 
@@ -375,55 +371,58 @@ var write_wav = function(wav_file_obj) {
 
         // console.log("1111111  write_wav ", property, wav_file_obj[property]);
 
-        switch (property) {
+        if (wav_file_obj.hasOwnProperty(property)) {
 
-            case "sample_rate" : {
+            switch (property) {
 
-                sample_rate = wav_file_obj[property];
+                case "sample_rate" : {
+
+                    sample_rate = wav_file_obj[property];
+                    break;
+                }
+
+                case "bit_depth" : {
+
+                    bit_depth = wav_file_obj[property];
+                    break;
+                }
+
+                case "num_channels" : {
+
+                    num_channels = wav_file_obj[property];
+                    break;
+                }
+
+                case "filename" : {
+
+                    path = wav_file_obj[property];
+                    break;
+                }
+
+                case "buffer" : {
+
+                    data_length = wav_file_obj[property].length;
+                    break;
+                }
+
+                // --- default - catch all if not identifed above
+
+                default :
+
+                console.log("NOTICE - write_wav ignore this ... seeing property NOT on authorized list : ", 
+                                property, " value ", wav_file_obj[property]);
+                process.exit(8);
+
                 break;
-            }
-
-            case "bit_depth" : {
-
-                bit_depth = wav_file_obj[property];
-                break;
-            }
-
-            case "num_channels" : {
-
-                num_channels = wav_file_obj[property];
-                break;
-            }
-
-            case "filename" : {
-
-                path = wav_file_obj[property];
-                break;
-            }
-
-            case "buffer" : {
-
-                data_length = wav_file_obj[property].length;
-                break;
-            }
-
-            // --- default - catch all if not identifed above
-
-            default :
-
-            console.log("NOTICE - write_wav ignore this ... seeing property NOT on authorized list : ", 
-                            property, " value ", wav_file_obj[property]);
-            process.exit(8);
-
-            break;
+            };
         };
-    }
+    };
 
     // console.log("FFFFFFFF sample_rate  ", sample_rate);
     // console.log("FFFFFFFF bit_depth    ", bit_depth);
     // console.log("FFFFFFFF num_channels ", num_channels);
-    console.log("FFFFFFFF data_length ", data_length);
-    console.log("FFFFFFFF filename ", path);
+    // console.log("FFFFFFFF data_length ", data_length);
+    // console.log("FFFFFFFF filename ", path);
 
 
     // ---
@@ -466,14 +465,7 @@ var write_wav = function(wav_file_obj) {
 
     write_stream.on('finish', function() {
 
-      console.error('all writes are now complete.');
-      console.error('all writes are now complete.');
-      console.error('all writes are now complete.');
-      console.error('all writes are now complete.');
-      console.error('all writes are now complete.');
-      console.error('all writes are now complete.');
-      console.error('all writes are now complete.');
-
+        // console.error('all writes are now complete.');
     });
 
 
@@ -609,61 +601,14 @@ var write_wav = function(wav_file_obj) {
 
     // ---
 
-/*
-    write_stream.write(wav_file_obj.buffer);
-
-    write_stream.end();
-*/
-
-    //prepare the length of the buffer to 4 bytes per float
-    // var buffer = new Buffer(data.length*4);
-    // var little_endian_buffer = new Buffer(wav_file_obj.buffer.length*2); // *2 since going from 16 bits to 8 bits
-    // var little_endian_buffer = new Buffer(wav_file_obj.buffer.length); // *2 since going from 16 bits to 8 bits
-    // var little_endian_buffer = new Buffer(wav_file_obj.buffer.length); // *2 since going from 16 bits to 8 bits
-    // var little_endian_buffer = new Int16Array(wav_file_obj.buffer.length); // *2 since going from 16 bits to 8 bits
-
-
     var buffer_to_file = new Buffer( new Int16Array(wav_file_obj.buffer) );
 
 
     write_stream.write(buffer_to_file);
 
-    // write_stream.flush();
+    // console.log("wav_file_obj.buffer ", wav_file_obj.buffer.length);
 
-
-    /*
-    var curr_value;
-
-    for(var i = 0; i < wav_file_obj.buffer.length; i++){
-        //write the float in Little-Endian and move the offset
-        // buffer.writeFloatLE(data[i], i*4);
-        // little_endian_buffer.writeUInt16LE(wav_file_obj.buffer[i], i*2);
-
-        // little_endian_buffer.writeFloatLE(wav_file_obj.buffer[i], i*2);
-        // little_endian_buffer.writeFloatLE(wav_file_obj.buffer[i], i);
-
-        curr_value = (wav_file_obj.buffer[i + 1] << 8) | wav_file_obj.buffer;
-
-        // little_endian_buffer.writeInt16LE(curr_value, i);
-        little_endian_buffer[i] = curr_value;
-    };
-
-    write_stream.write(little_endian_buffer);
-    */
-
-/*
-    console.log("aa bb cc dd ee ff");
-
-
-    write_stream.write(wav_file_obj.buffer);
-*/
-
-
-    console.log("wav_file_obj.buffer ", wav_file_obj.buffer.length);
-    // console.log("little_endian_buffer ", little_endian_buffer.length);
-
-
-    console.log("~~~~~~~~~ BOT write_wav ~~~~~~~~~");
+    // console.log("~~~~~~~~~ BOT write_wav ~~~~~~~~~");
 
 };       //      write_wav
 // exports.write_wav = write_wav;
@@ -703,7 +648,7 @@ var write_json_to_file = function(output_filename, given_json, given_options) {
             process.exit(8);
     };
 
-    console.log("just wrote to output file ", output_filename);
+    // console.log("just wrote to output file ", output_filename);
 };
 exports.write_json_to_file = write_json_to_file;
 
@@ -726,7 +671,7 @@ var read_file_retrieve_json = function(input_filename, given_options) {
             process.exit(8);
     };
 
-    console.log("just read from input file ", input_filename);
+    // console.log("just read from input file ", input_filename);
 
     return json_back_to_caller;
 };
@@ -950,16 +895,16 @@ var normalize_buffer = function(audio_obj, spec) {
         // console.log("seeing input spec with spec.allowed_maximum ", spec.allowed_maximum);
     };
 
-    console.log("here is spec ", spec);
-    console.log("here is spec property_buffer ", property_buffer);
-    console.log("here is spec allowed_minimum ", allowed_minimum);
-    console.log("here is spec allowed_maximum ", allowed_maximum);
+    // console.log("here is spec ", spec);
+    // console.log("here is spec property_buffer ", property_buffer);
+    // console.log("here is spec allowed_minimum ", allowed_minimum);
+    // console.log("here is spec allowed_maximum ", allowed_maximum);
 
     // var given_buffer = audio_obj[property_buffer];
 
     var size_buffer = audio_obj[property_buffer].length;
 
-    console.log("size_buffer ", size_buffer);
+    // console.log("size_buffer ", size_buffer);
 
     var observed_min =  really_big_number; // pull from some max float constant if possible
     var observed_max = -1.0 * really_big_number; // pull from some max float constant if possible
@@ -985,17 +930,17 @@ var normalize_buffer = function(audio_obj, spec) {
 
     // ---
 
-    console.log("observed_min ", observed_min);
-    console.log("observed_max ", observed_max);
+    // console.log("observed_min ", observed_min);
+    // console.log("observed_max ", observed_max);
 
-    console.log("allowed_minimum ", allowed_minimum);
-    console.log("allowed_maximum ", allowed_maximum);
+    // console.log("allowed_minimum ", allowed_minimum);
+    // console.log("allowed_maximum ", allowed_maximum);
 
 
     // if (observed_min > allowed_minimum && observed_max < allowed_maximum) {
     if (observed_min >= allowed_minimum && observed_max <= allowed_maximum) {
 
-        console.log("OK  no work to do ... values already inside boundary");
+        // console.log("OK  no work to do ... values already inside boundary");
 
         return; // no work to do ... values already inside boundary
     }
@@ -1009,16 +954,16 @@ var normalize_buffer = function(audio_obj, spec) {
     var observed_midpoint = (observed_max + observed_min) / 2.0;
 
 
-    console.log("allowed_difference_btw_max_N_min ", allowed_difference_btw_max_N_min);
-    console.log("observed_difference_btw_max_N_min ", observed_difference_btw_max_N_min);
-    console.log("observed_midpoint ", observed_midpoint);
+    // console.log("allowed_difference_btw_max_N_min ", allowed_difference_btw_max_N_min);
+    // console.log("observed_difference_btw_max_N_min ", observed_difference_btw_max_N_min);
+    // console.log("observed_midpoint ", observed_midpoint);
 
 
     if (observed_difference_btw_max_N_min == 0) {
 
         // seeing flatline input so just shift to zero
 
-        console.log("OK seeing unruly values YET all are same so just shift to zero");
+        // console.log("OK seeing unruly values YET all are same so just shift to zero");
 
         for (var index = 0; index < size_buffer; index++) {
 
@@ -1027,13 +972,13 @@ var normalize_buffer = function(audio_obj, spec) {
 
     } else { // now implement normalize of unruly input values into allowed values inside boundary
 
-        console.log("OK about to normalize values from observed min,max : ", observed_min, observed_max,
-                        " to allowed min,max : ", allowed_minimum, allowed_maximum);
+        // console.log("OK about to normalize values from observed min,max : ", observed_min, observed_max,
+        //                 " to allowed min,max : ", allowed_minimum, allowed_maximum);
 
         var correction_factor = allowed_difference_btw_max_N_min / observed_difference_btw_max_N_min;
 
-        console.log("observed_midpoint ", observed_midpoint);
-        console.log("correction_factor ", correction_factor);
+        // console.log("observed_midpoint ", observed_midpoint);
+        // console.log("correction_factor ", correction_factor);
 
         var post_processing_min =  really_big_number;
         var post_processing_max = -1.0 * really_big_number;
@@ -1066,24 +1011,21 @@ exports.normalize_buffer = normalize_buffer;
 
 // ---
 
-function cb_parse_buffer_as_wav_format(input_obj, property_buffer_raw_input_file, property_buffer_input_file, cb_when_done) {
+function cb_parse_buffer_as_wav_format(audio_obj, property_buffer_raw_input_file, property_buffer_input_file, cb_when_done) {
 
     // sync NOT async ... output into buffer_input_file
-    // shared_utils.parse_wav(input_obj, property_buffer_raw_input_file, property_buffer_input_file);
-    parse_wav(input_obj, property_buffer_raw_input_file, property_buffer_input_file);
 
-    delete input_obj[property_buffer_raw_input_file];    // no longer need raw pre parse buffer
+    parse_wav(audio_obj, property_buffer_raw_input_file, property_buffer_input_file);
 
-    console.log("buffer size ", input_obj[property_buffer_input_file].length);
+    delete audio_obj[property_buffer_raw_input_file];    // no longer need raw pre parse buffer
 
-    input_obj.buffer = shared_utils.convert_16_bit_signed_int_to_32_bit_float(input_obj[property_buffer_input_file]);
-    // input_obj.buffer =              convert_16_bit_signed_ints_into_32_bit_floats(input_obj[property_buffer_input_file]);
+    // console.log("buffer size ", audio_obj[property_buffer_input_file].length);
 
-// bbb
+    audio_obj.buffer = shared_utils.convert_16_bit_signed_int_to_32_bit_float(audio_obj[property_buffer_input_file]);
 
-    delete input_obj[property_buffer_input_file];    // no longer need raw pre parse buffer
+    delete audio_obj[property_buffer_input_file];    // no longer need raw pre parse buffer
 
-    cb_when_done(input_obj);  //  this is defined by original caller to hand back audio object with populated buffer
+    cb_when_done(audio_obj);  //  this is defined by original caller to hand back audio object with populated buffer
 
 };      //      cb_parse_buffer_as_wav_format
 
@@ -1091,7 +1033,7 @@ function cb_parse_buffer_as_wav_format(input_obj, property_buffer_raw_input_file
 
 var read_16_bit_wav_file_into_32_bit_float_buffer = function(read_wav_file_obj, wav_input_filename, spec, cb_when_done) {
 
-    console.log("TTT ___ read_16_bit_wav_file_into_32_bit_float_buffer ___ ");
+    // console.log("TTT ___ read_16_bit_wav_file_into_32_bit_float_buffer ___ ");
 
     // ---
 
@@ -1102,15 +1044,15 @@ var read_16_bit_wav_file_into_32_bit_float_buffer = function(read_wav_file_obj, 
 
     read_wav_file_obj[property_buffer_raw_input_file] = new Buffer(0);
 
-    console.log("name cb cb_parse_buffer_as_wav_format ", cb_parse_buffer_as_wav_format.name);
-    console.log("name cb cb_when_done ", cb_when_done.name);
+    // console.log("name cb cb_parse_buffer_as_wav_format ", cb_parse_buffer_as_wav_format.name);
+    // console.log("name cb cb_when_done ", cb_when_done.name);
 
     read_file_into_buffer(read_wav_file_obj, property_buffer_raw_input_file,
                                     property_buffer_input_file,
                                     cb_parse_buffer_as_wav_format,
                                     cb_when_done);
 
-    console.log("BBB ___ read_16_bit_wav_file_into_32_bit_float_buffer ___ ");
+    // console.log("BBB ___ read_16_bit_wav_file_into_32_bit_float_buffer ___ ");
 
 };      //      read_16_bit_wav_file_into_32_bit_float_buffer
 // NOT for export --- internal consumption ONLY its outer wrapper is called read_wav_file
@@ -1121,7 +1063,7 @@ var read_wav_file = function(input_filename, cb_read_file_done) {
 
     // ------------ read wav file -------------------- //
 
-    console.log("read_wav_file with input_filename ", input_filename);
+    // console.log("read_wav_file with input_filename ", input_filename);
 
     // bbb
 
@@ -1144,7 +1086,6 @@ var read_wav_file = function(input_filename, cb_read_file_done) {
                                     cb_read_file_done);
 };
 exports.read_wav_file = read_wav_file;
-
 
 // ---
 

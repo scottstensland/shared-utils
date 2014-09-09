@@ -72,7 +72,7 @@
 
 	    var max_valid_16_bit_integer = -1 + Math.pow(2, 16);
 
-	    console.log("max_valid_16_bit_integer ", max_valid_16_bit_integer);
+	    // console.log("max_valid_16_bit_integer ", max_valid_16_bit_integer);
 
 	    // ---
 
@@ -111,7 +111,7 @@
 
 		var max_valid_input_value = 2 >> 16 - 1;
 
-		console.log("max_valid_input_value ", max_valid_input_value);
+		// console.log("max_valid_input_value ", max_valid_input_value);
 
 
 		var new_32_bit_array = new Float32Array(input_16_bit_int_buffer.length);
@@ -179,11 +179,11 @@
 
 		var new_32_bit_array = new Float32Array(input_8_bit_int_buffer.length / 2);
 
-		var max_int_value_seen = -99999.9;
-		var min_int_value_seen =  99999.9;
+		var max_int_value_seen = -99999999.9;
+		var min_int_value_seen =  99999999.9;
 
-		var max_float_value_seen = -99999.9;
-		var min_float_value_seen =  99999.9;
+		var max_float_value_seen = -99999999.9;
+		var min_float_value_seen =  99999999.9;
 
 		// var tmp_16_bit_signed_int;
 		var tmp_16_bit_unsigned_int;
@@ -199,8 +199,8 @@
 			// value_16_bit_signed_int = conv_bit_size(tmp_16_bit_signed_int, bits_per_sample);
 			value_16_bit_signed_int = conv_bit_size(tmp_16_bit_unsigned_int, bits_per_sample);
 
-			console.log("tmp_16_bit_unsigned_int ", tmp_16_bit_unsigned_int, 
-					   " value_16_bit_signed_int ", value_16_bit_signed_int);
+			// console.log("tmp_16_bit_unsigned_int ", tmp_16_bit_unsigned_int, 
+			// 		   " value_16_bit_signed_int ", value_16_bit_signed_int);
 
 			if (value_16_bit_signed_int < min_int_value_seen) {
 
@@ -228,8 +228,8 @@
 			}
 		};
 
-		console.log("max_int_value_seen ", max_int_value_seen, " min_int_value_seen ", min_int_value_seen);
-		console.log("max_float_value_seen ", max_float_value_seen, " min_float_value_seen ", min_float_value_seen);
+		// console.log("max_int_value_seen ", max_int_value_seen, " min_int_value_seen ", min_int_value_seen);
+		// console.log("max_float_value_seen ", max_float_value_seen, " min_float_value_seen ", min_float_value_seen);
 
 		return new_32_bit_array;
 	};
@@ -281,6 +281,8 @@
 		
 		var mode = given_mode || "partial";
 		var label = given_label || "";
+ 
+		limit_size_buffer = (limit_size_buffer == 0) ? 9999999999 : limit_size_buffer; // no limit if given 0 as limit
 
 		var size_buffer = limit_size_buffer;
 
@@ -303,11 +305,11 @@
 
 		        if (property.substring(0,3) == "cb_") {
 
-		        	console.log(given_label, property, " ignoring callback");
+		        	// console.log(given_label, property, " ignoring callback");
 
 		        } else if (property == "socket_conn") {
 
-		        	console.log(given_label, property, " ignoring socket connection details");
+		        	// console.log(given_label, property, " ignoring socket connection details");
 
 
 		        } else if ("buffer" == property || 
