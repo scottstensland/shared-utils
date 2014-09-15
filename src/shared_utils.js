@@ -472,6 +472,8 @@
         };
 
 	    console.log("size_buffer ", size_buffer);
+	    console.log("size left   ", left_obj.buffer.length);
+	    console.log("size right  ", right_obj.buffer.length);
 
 	    if (size_buffer > left_obj.buffer.length || size_buffer > right_obj.buffer.length) {
 
