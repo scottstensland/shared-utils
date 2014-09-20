@@ -73,6 +73,30 @@ var copy_properties_across_objects = function(input_obj, output_obj) {
 
 exports.copy_properties_across_objects = copy_properties_across_objects;
 
+
+
+var get_files = function(dir,files_) {
+
+    files_ = files_ || [];
+    if (typeof files_ === 'undefined') files_=[];
+    var files = fs.readdirSync(dir);
+
+    for(var i in files) {
+
+        if (!files.hasOwnProperty(i)) continue;
+        var name = dir+'/'+files[i];
+        if (fs.statSync(name).isDirectory()){
+            get_files(name,files_);
+        } else {
+            files_.push(name);
+        }
+    }
+    return files_;
+}
+exports.get_files = get_files;
+
+
+
 // ---
 
 var parse_wav = function(wav_input_file_obj, property_input_buffer, property_output_buffer) {
