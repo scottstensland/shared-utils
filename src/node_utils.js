@@ -75,7 +75,7 @@ exports.copy_properties_across_objects = copy_properties_across_objects;
 
 
 
-var get_file_listing = function(dir, files_) {
+var list_files_in_dir_sync = function(dir, files_) {
 
     var files_ = files_ || [];
 
@@ -96,14 +96,14 @@ var get_file_listing = function(dir, files_) {
 
         if (fs.statSync(name).isDirectory()) {
 
-            get_file_listing(name,files_);
+            list_files_in_dir_sync(name,files_);
         } else {
             files_.push(name);
         }
     }
     return files_;
 }
-exports.get_file_listing = get_file_listing;
+exports.list_files_in_dir_sync = list_files_in_dir_sync;
 
 
 
