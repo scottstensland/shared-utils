@@ -75,25 +75,35 @@ exports.copy_properties_across_objects = copy_properties_across_objects;
 
 
 
-var get_files = function(dir,files_) {
+var get_file_listing = function(dir, files_) {
 
-    files_ = files_ || [];
-    if (typeof files_ === 'undefined') files_=[];
+    var files_ = files_ || [];
+
+	if (! fs.existsSync(dir)) {
+		// directory does not exist - silently return
+		return files_;
+	}
+
+    if (typeof files_ === 'undefined') { files_=[]; };
+
     var files = fs.readdirSync(dir);
 
     for(var i in files) {
 
-        if (!files.hasOwnProperty(i)) continue;
-        var name = dir+'/'+files[i];
-        if (fs.statSync(name).isDirectory()){
-            get_files(name,files_);
+        if (! files.hasOwnProperty(i)) continue;
+
+        var name = dir +'/' + files[i];
+
+        if (fs.statSync(name).isDirectory()) {
+
+            get_file_listing(name,files_);
         } else {
             files_.push(name);
         }
     }
     return files_;
 }
-exports.get_files = get_files;
+exports.get_file_listing = get_file_listing;
 
 
 
