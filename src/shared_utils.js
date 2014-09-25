@@ -294,7 +294,8 @@
 
 		    for (var property in given_obj) {
 
-		        console.log(given_label, " property ", property);
+		        // console.log(given_label, " property ", property);
+		        console.log(given_label, " property -->" + property + "<--\t", given_obj[property]);
 		    }
 
 		} else {

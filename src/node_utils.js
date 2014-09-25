@@ -106,6 +106,175 @@ var list_files_in_dir_sync = function(dir, files_) {
 exports.list_files_in_dir_sync = list_files_in_dir_sync;
 
 
+var inner_parse_header = function(wav_input_file_obj, property_input_buffer, cb_when_done) {
+
+    // console.log("TOP inner_parse_header");
+
+    // http://stackoverflow.com/questions/19991405/how-can-i-detect-whether-a-wav-file-has-a-44-or-46-byte-header?lq=1
+
+    // http://www-mmsp.ece.mcgill.ca/Documents/AudioFormats/WAVE/WAVE.html
+    // http://www-mmsp.ece.mcgill.ca/Documents/AudioFormats/WAVE/Samples.html
+
+    // var raw_buffer = wav_input_file_obj.raw_buffer;   // entire contents of input file which is parsed 
+    var local_input_buffer = wav_input_file_obj[property_input_buffer];   // entire contents of input file which is parsed 
+
+    // console.log("top of parse_wav +++++++++++++++++++++  local_input_buffer.length ", local_input_buffer.length,
+    //             " typeof local_input_buffer ", typeof local_input_buffer,
+    //             " instanceof local_input_buffer ", (local_input_buffer instanceof Array) ? "Array" : "other"
+    //             );
+
+    var size_header = 44;
+    var offset = 0;
+
+    var RIFF = new Buffer(4);   // these MUST remain size 4 ... Resource Interchange File Format
+    var WAVE = new Buffer(4);
+    var fmt  = new Buffer(4);
+    var data = new Buffer(4);
+
+    local_input_buffer.copy(RIFF, 0, offset, RIFF.length);  //  chunckID 0 offset 4 bytes
+    offset += 4;
+
+    // console.log("is this RIFF or what ",RIFF.toString('ascii',0,RIFF.length)," RIFF.length ",RIFF.length);
+
+    if (RIFF != "RIFF") {
+
+        if (RIFF == " RIFX") {
+
+            cb_when_done("ERROR - this WAV file is stored Big Endian - currently we only handle Little Endian", 
+                        wav_input_file_obj);
+            return;
+
+        } else {
+
+            cb_when_done("ERROR - failed to see RIFF at top of input WAV file parse, or RIFX for that matter" +
+                        " instead saw : " + RIFF, wav_input_file_obj);
+            return;
+
+            // https://stackoverflow.com/questions/7310521/node-js-best-practice-exception-handling
+        }
+    }
+
+    var chunckSize;
+    chunckSize = local_input_buffer.readUInt32LE(offset);   //  chunckSize 4 offset 4 bytes
+    offset += 4;
+    // console.log("on read ... chunckSize ", chunckSize);
+
+
+    local_input_buffer.copy(WAVE, 0, offset, offset + WAVE.length); //  format 8 offset 4 bytes
+    offset += 4;
+    // console.log("on read ... WAVE is what  ", WAVE.toString('ascii', 0, WAVE.length), " WAVE.length ", WAVE.length);
+
+
+
+
+    local_input_buffer.copy(fmt, 0, offset, offset + fmt.length);// subchunk1ID  12 offset 4 bytes
+    offset += 4;
+    // console.log("on read ... fmt is what  ", fmt.toString('ascii', 0, fmt.length), " fmt.length ", fmt.length);
+
+
+
+    wav_input_file_obj.pcm_format = local_input_buffer.readUInt32LE(offset);   //  subchunk1Size 16 offset 4 bytes
+    offset += 4;
+    // console.log("on read ... pcm_format ", wav_input_file_obj.pcm_format);
+    // valid values of Chunk size :   16 or 18 or 40
+
+
+
+
+    wav_input_file_obj.audio_format = local_input_buffer.readUInt16LE(offset);   //  audioFormat 20 offset 2 bytes
+    offset += 2;
+    // console.log('on read ... audio_format ', wav_input_file_obj.audio_format);
+
+
+    wav_input_file_obj.num_channels = local_input_buffer.readUInt16LE(offset);   //  numChannels 22 offset 2 bytes
+    offset += 2;
+    // console.log('on read ... num_channels ', wav_input_file_obj.num_channels);
+    //  Number of interleaved channels
+
+
+
+    wav_input_file_obj.sample_rate = local_input_buffer.readUInt32LE(offset);   //  sampleRate 24 offset 4 bytes
+    offset += 4;
+    // console.log('on read ... sample_rate ', wav_input_file_obj.sample_rate);
+    // blocks per second
+
+
+    wav_input_file_obj.byte_rate = local_input_buffer.readUInt32LE(offset);   //  byteRate 28 offset 4 bytes
+    offset += 4;
+    // console.log("on read ... byte_rate ", wav_input_file_obj.byte_rate);
+
+    wav_input_file_obj.bit_depth = (wav_input_file_obj.byte_rate * 8.0) / 
+                                    (wav_input_file_obj.sample_rate * wav_input_file_obj.num_channels);
+    // console.log("on read ... bit_depth    ", wav_input_file_obj.bit_depth);
+    // average bytes per second - data rate
+
+
+    wav_input_file_obj.block_align = local_input_buffer.readUInt16LE(offset);   //  blockAlign 32 offset 2 bytes
+    offset += 2;
+    // console.log("on read ... block_align ", wav_input_file_obj.block_align);
+    // data block size in bytes
+
+
+    wav_input_file_obj.bits_per_sample = local_input_buffer.readUInt16LE(offset);   //  bitsPerSample 34 offset 2 bytes
+    offset += 2;
+    // console.log("on read ... bits_per_sample ", wav_input_file_obj.bits_per_sample);
+    // bits per sample
+
+
+    local_input_buffer.copy(data, 0, offset, offset + data.length); //  subchunk2ID 36 offset 4 bytes
+    offset += 4;
+    // console.log("data is what  ", data.toString('ascii', 0, data.length), " data.length ", data.length);
+
+
+    var subchunk2Size;
+    subchunk2Size = local_input_buffer.readUInt32LE(offset);   //  subchunk2Size 36 offset 4 bytes
+    offset += 4;
+    // console.log("subchunk2Size ", subchunk2Size);
+
+
+    if (! (size_header == offset)) {
+
+        cb_when_done("ERROR - input file header must contain " + size_header + 
+                            " bytes it incorrectly contains : " + offset, wav_input_file_obj);
+    };
+
+    cb_when_done(null, wav_input_file_obj);
+
+    // end of read header 
+
+};      //      inner_parse_header
+
+// ---
+
+var parse_wav_header = function(wav_input_file_obj, requested_input_filename, db_done) {
+
+    var header_chunk_size = 44;
+    var property_input_buffer = "header_buffer";
+
+    fs.open(requested_input_filename, 'r', function(error, fd) {
+
+        if (error) {
+            db_done("ERROR - failed to open file " + requested_input_filename +
+                " message : " + error.message, wav_input_file_obj);
+        } else {
+
+            wav_input_file_obj[property_input_buffer] = new Buffer(header_chunk_size);
+
+            fs.read(fd, wav_input_file_obj[property_input_buffer], 0, header_chunk_size, 0, function(err, end_index) {
+
+                // console.log("wav_input_file_obj[property_input_buffer] ", 
+                //             wav_input_file_obj[property_input_buffer].toString('utf-8', 0, end_index));
+
+                // console.log("wav_input_file_obj[property_input_buffer] ", wav_input_file_obj[property_input_buffer]);
+
+                // console.log("end_index ", end_index);
+
+                inner_parse_header(wav_input_file_obj, property_input_buffer, db_done);
+            });            
+        }
+    });
+};
+exports.parse_wav_header = parse_wav_header;
 
 // ---
 
