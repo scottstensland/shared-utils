@@ -2,7 +2,10 @@
 
 console.log("here is __dirname ", __dirname );
 
-var input_filename = process.argv[2] || __dirname + "/Elephant_sounds_rgUFu_hVhlk_roar_mono_tiny.wav";
+// var input_filename = process.argv[2] || __dirname + "/Elephant_sounds_rgUFu_hVhlk_roar_mono_tiny.wav";
+var input_filename = process.argv[2] || __dirname + "/sine_wave_32768_64.wav";
+
+
 
 console.log("input_filename ", input_filename );
 

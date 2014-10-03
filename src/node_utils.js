@@ -238,6 +238,8 @@ var inner_parse_header = function(wav_input_file_obj, property_input_buffer, cb_
                             " bytes it incorrectly contains : " + offset, wav_input_file_obj);
     };
 
+    delete wav_input_file_obj[property_input_buffer]; // zaps off property header_buffer 
+
     cb_when_done(null, wav_input_file_obj);
 
     // end of read header 
@@ -479,7 +481,7 @@ var read_file_into_buffer = function(input_file_obj, property_buffer_raw_input_f
 
             // if (curr_print_count < max_print_count) {
 
-            // console.log('CCCCCC binary newData length this callback cycle is ', newData.length);
+            //     console.log('CCCCCC binary newData length this callback cycle is ', newData.length);
             // }
 
             // size_limit_buffer = (newData.length < limit_size_input_file_buffer) ?
@@ -490,6 +492,13 @@ var read_file_into_buffer = function(input_file_obj, property_buffer_raw_input_f
             input_file_obj[property_buffer_raw_input_file] = 
                     Buffer.concat([input_file_obj[property_buffer_raw_input_file], newData], 
                                    input_file_obj[property_buffer_raw_input_file].length+newData.length);
+
+
+            // var index = 44;
+            // for (; index < 50; index++) {
+
+            //     console.log(index, ' SSSSSSSSS  ', input_file_obj[property_buffer_raw_input_file][index]);
+            // };
 
             // input_file_obj[property_buffer_raw_input_file] = 
             //         Buffer.concat([input_file_obj[property_buffer_raw_input_file], newData], 
