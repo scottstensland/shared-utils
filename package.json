@@ -12,6 +12,9 @@
   "scripts": {
     "test": "node test/node_cli_test.js"
   },
+      "dependencies": {
+		"audio-utils" : "1.0.x"
+    },
   "keywords": [
     "format",
     "float",
