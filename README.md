@@ -10,6 +10,7 @@ Available at https://github.com/scottstensland/shared-utils
 
 
 
+
 ### synthesize an audio buffer with random noise OR sinusoidal curve
 
 ```js
