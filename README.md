@@ -6,7 +6,6 @@ Contains useful utilities like random number generator for ints or floats in min
 
 Available at https://github.com/scottstensland/shared-utils
 
-
 ### synthesize an audio buffer with random noise OR sinusoidal curve
 
 ```js
@@ -67,5 +66,43 @@ var source_wave_filename = path.join(output_dir, source_wave + output_format);
 shared_utils.write_32_bit_float_buffer_to_16_bit_wav_file(source_obj, source_wave_filename);
 
 ```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
