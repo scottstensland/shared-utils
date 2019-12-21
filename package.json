@@ -13,7 +13,7 @@
     "test": "node test/node_cli_test.js"
   },
   "dependencies": {
-    "audio-utils": ">=1.0.x"
+    "audio-utils": "x.x.x"
   },
   "keywords": [
     "format",
