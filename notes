@@ -1,0 +1,33 @@
+
+
+https://nodejs.org/fa/docs/guides/buffer-constructor-deprecation/
+
+
+249  pop_audio_buffer  0.61354660987854
+250  pop_audio_buffer  -0.19344328343868256
+251  pop_audio_buffer  0.9249994158744812
+252  pop_audio_buffer  0.7504375576972961
+253  pop_audio_buffer  -0.13685886561870575
+254  pop_audio_buffer  0.5620771646499634
+255  pop_audio_buffer  0.9101791977882385
+ output_dir  /tmp
+source_wave_filename    /tmp/source_wave_shared_utils_test.wav
+buffer.js:333
+    throw new ERR_INVALID_ARG_TYPE('size', 'number', size);
+    ^
+
+TypeError [ERR_INVALID_ARG_TYPE]: The "size" argument must be of type number. Received type string
+    at new alloc (buffer.js:345:3)
+    at write_wav (/home/gemma/src/github.com/scottstensland/shared-utils/src/node_utils.js:648:16)
+    at Object.exports.write_32_bit_float_buffer_to_16_bit_wav_file (/home/gemma/src/github.com/scottstensland/shared-utils/src/node_utils.js:1338:5)
+    at Object.<anonymous> (/home/gemma/src/github.com/scottstensland/shared-utils/test/node_cli_test.js:98:14)
+    at Module._compile (internal/modules/cjs/loader.js:959:30)
+    at Object.Module._extensions..js (internal/modules/cjs/loader.js:995:10)
+    at Module.load (internal/modules/cjs/loader.js:815:32)
+    at Function.Module._load (internal/modules/cjs/loader.js:727:14)
+    at Function.Module.runMain (internal/modules/cjs/loader.js:1047:10)
+    at internal/main/run_main_module.js:17:11 {
+  code: 'ERR_INVALID_ARG_TYPE'
+
+
+

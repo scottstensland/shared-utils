@@ -126,10 +126,10 @@ var inner_parse_header = function(wav_input_file_obj, property_input_buffer, cb_
     var size_header = 44;
     var offset = 0;
 
-    var RIFF = new Buffer(4);   // these MUST remain size 4 ... Resource Interchange File Format
-    var WAVE = new Buffer(4);
-    var fmt  = new Buffer(4);
-    var data = new Buffer(4);
+    var RIFF = new Buffer.alloc(4);   // these MUST remain size 4 ... Resource Interchange File Format
+    var WAVE = new Buffer.alloc(4);
+    var fmt  = new Buffer.alloc(4);
+    var data = new Buffer.alloc(4);
 
     local_input_buffer.copy(RIFF, 0, offset, RIFF.length);  //  chunckID 0 offset 4 bytes
     offset += 4;
@@ -260,7 +260,7 @@ var parse_wav_header = function(wav_input_file_obj, requested_input_filename, db
                 " message : " + error.message, wav_input_file_obj);
         } else {
 
-            wav_input_file_obj[property_input_buffer] = new Buffer(header_chunk_size);
+            wav_input_file_obj[property_input_buffer] = new Buffer.alloc(header_chunk_size);
 
             fs.read(fd, wav_input_file_obj[property_input_buffer], 0, header_chunk_size, 0, function(err, end_index) {
 
@@ -298,10 +298,10 @@ var parse_wav = function(wav_input_file_obj, property_input_buffer, property_out
     var size_header = 44;
     var offset = 0;
 
-    var RIFF = new Buffer(4);   // these MUST remain size 4 ... Resource Interchange File Format
-    var WAVE = new Buffer(4);
-    var fmt  = new Buffer(4);
-    var data = new Buffer(4);
+    var RIFF = new Buffer.alloc(4);   // these MUST remain size 4 ... Resource Interchange File Format
+    var WAVE = new Buffer.alloc(4);
+    var fmt  = new Buffer.alloc(4);
+    var data = new Buffer.alloc(4);
 
     local_input_buffer.copy(RIFF, 0, offset, RIFF.length);  //  chunckID 0 offset 4 bytes
     offset += 4;
@@ -426,7 +426,7 @@ var parse_wav = function(wav_input_file_obj, property_input_buffer, property_out
     // local_input_buffer.copy(wav_input_file_obj.buffer, 0, offset, offset + size_buffer);
     // console.log("end of read payload buffer size  ", wav_input_file_obj.buffer.length);    
 
-    wav_input_file_obj[property_output_buffer] = new Buffer(size_buffer);
+    wav_input_file_obj[property_output_buffer] = new Buffer.alloc(size_buffer);
 
     local_input_buffer.copy(wav_input_file_obj[property_output_buffer], 0, offset, offset + size_buffer);
 
@@ -641,10 +641,10 @@ var write_wav = function(wav_file_obj) {
 
     var size_header = 44;   // constant number of bytes in WAV header as per spec
 
-    var RIFF = new Buffer('RIFF');  // each of these constant MUST remain 4 bytes in size
-    var WAVE = new Buffer('WAVE');
-    var fmt  = new Buffer('fmt ');
-    var data = new Buffer('data');
+    var RIFF = new Buffer.from('RIFF');  // each of these constant MUST remain 4 bytes in size
+    var WAVE = new Buffer.from('WAVE');
+    var fmt  = new Buffer.from('fmt ');
+    var data = new Buffer.from('data');
 
     // ---
 
@@ -684,7 +684,7 @@ var write_wav = function(wav_file_obj) {
 
     // ---
 
-    var header = new Buffer(size_header);
+    var header = new Buffer.alloc(size_header);
     var offset = 0;
 
     // write the "RIFF" identifier
@@ -813,7 +813,7 @@ var write_wav = function(wav_file_obj) {
 
     // ---
 
-    var buffer_to_file = new Buffer( new Int16Array(wav_file_obj.buffer) );
+    var buffer_to_file = new Buffer.alloc( new Int16Array(wav_file_obj.buffer) );
 
 
     write_stream.write(buffer_to_file);
@@ -995,7 +995,7 @@ var convert_32_bit_floats_into_16_bit_signed_ints = function(input_32_bit_float_
 
     // console.log("size 16 bit ints ", size_16_bit_int_buff); //  is OK
 
-    output_16_bit_audio_obj.buffer = new Buffer(size_16_bit_int_buff);// input buffer is 32 bit we want 16 bit so half it
+    output_16_bit_audio_obj.buffer = new Buffer.alloc(size_16_bit_int_buff);// input buffer is 32 bit we want 16 bit so half it
 
     // var one_float = new Float32Array(1);
 
@@ -1254,7 +1254,7 @@ var read_16_bit_wav_file_into_32_bit_float_buffer = function(read_wav_file_obj, 
 
     read_wav_file_obj.filename = wav_input_filename;
 
-    read_wav_file_obj[property_buffer_raw_input_file] = new Buffer(0);
+    read_wav_file_obj[property_buffer_raw_input_file] = new Buffer.alloc(0);
 
     // console.log("name cb cb_parse_buffer_as_wav_format ", cb_parse_buffer_as_wav_format.name);
     // console.log("name cb cb_when_done ", cb_when_done.name);
@@ -1285,7 +1285,7 @@ var read_wav_file = function(input_filename, cb_read_file_done) {
 
     wav_file_input_obj.filename = input_filename;
 
-    wav_file_input_obj[property_buffer_raw_input_file] = new Buffer(0);
+    wav_file_input_obj[property_buffer_raw_input_file] = new Buffer.alloc(0);
 
     // console.log("abouttttt to read wav_file_input_obj.filename ", wav_file_input_obj.filename);
 
