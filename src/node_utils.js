@@ -813,7 +813,7 @@ var write_wav = function(wav_file_obj) {
 
     // ---
 
-    var buffer_to_file = new Buffer.alloc( new Int16Array(wav_file_obj.buffer) );
+    var buffer_to_file = new Buffer.from( new Int16Array(wav_file_obj.buffer) );
 
 
     write_stream.write(buffer_to_file);
