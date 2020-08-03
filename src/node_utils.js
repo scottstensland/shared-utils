@@ -1305,7 +1305,7 @@ exports.write_32_bit_float_buffer_to_16_bit_wav_file = function(audio_obj, wav_o
 
     var property_buffer = "buffer";   // defaults
 
-    var really_big_number = 999999.9;
+    // var really_big_number = 999999.9;
 
     var spec = spec || { flag_normalize : false }; // flag to normalize input into float range -1 <--> +1
     // var spec = spec || { flag_normalize : true };
